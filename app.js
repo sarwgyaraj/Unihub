@@ -1,12 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // Status mapping utility
+    // Status mapping utility using Lucide icons
     const statusMap = {
-        "Resolved": { class: "status-resolved", icon: "🟢", dot: "dot-resolved" },
-        "In Progress": { class: "status-progress", icon: "🟠", dot: "dot-progress" },
-        "Under Review": { class: "status-review", icon: "🟡", dot: "dot-review" },
-        "New": { class: "status-review", icon: "🆕", dot: "dot-review" },
+        "Resolved": { class: "status-resolved", icon: "check-circle-2", dot: "dot-resolved" },
+        "In Progress": { class: "status-progress", icon: "loader-2", dot: "dot-progress" },
+        "Under Review": { class: "status-review", icon: "eye", dot: "dot-review" },
+        "New": { class: "status-review", icon: "sparkles", dot: "dot-review" },
     };
+
+    // Helper to safely render icons after DOM updates
+    function updateIcons() {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
 
     // --- ROUTER LOGIC ---
     function handleRoute() {
@@ -51,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 break;
             case '#track':
                 document.getElementById('view-track').classList.add('active');
-                // clear previous tracking state
                 document.getElementById('track-result-container').style.display = 'none';
                 document.getElementById('track-id-input').value = '';
                 break;
@@ -68,17 +74,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 renderDashboard();
         }
 
-        // Scroll to top
         document.getElementById('main-scroll-area').scrollTop = 0;
+        updateIcons();
     }
 
-    // Listen to hash changes
     window.addEventListener('hashchange', handleRoute);
 
 
     // --- VIEW RENDERING FUNCTIONS ---
 
-    // 1. Dashboard View
     function renderDashboard() {
         if (!feedbackData || feedbackData.length === 0) {
             document.getElementById("statistics-grid").innerHTML = '';
@@ -86,10 +90,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="empty-state">
                     <h3>No feedback submitted yet</h3>
                     <p>Your feedback can help improve campus life.</p>
-                    <a href="#submit" class="primary-cta no-underline">+ Submit Anonymous Feedback</a>
+                    <a href="#submit" class="primary-cta no-underline"><i data-lucide="plus" class="cta-icon"></i> Submit Feedback</a>
                 </div>
             `;
-            document.getElementById("overview-card").innerHTML = '<p>No data to display.</p>';
+            document.getElementById("overview-card").innerHTML = '<p style="color:var(--text-muted)">No data to display.</p>';
             document.getElementById("recent-updates-list").innerHTML = '<div class="update-item"><p class="update-text">No recent updates.</p></div>';
             return;
         }
@@ -102,22 +106,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("statistics-grid").innerHTML = `
             <div class="stat-card">
-                <div class="stat-header"><span class="stat-title">Total Feedback</span><span class="stat-icon">💬</span></div>
+                <div class="stat-header"><span class="stat-title">Total Feedback</span><i data-lucide="message-square" class="stat-icon"></i></div>
                 <div class="stat-value">${total}</div>
                 <div class="stat-desc">All submissions</div>
             </div>
             <div class="stat-card">
-                <div class="stat-header"><span class="stat-title">Under Review</span><span class="stat-icon">🕐</span></div>
+                <div class="stat-header"><span class="stat-title">Under Review</span><i data-lucide="clock" class="stat-icon"></i></div>
                 <div class="stat-value">${underReview}</div>
                 <div class="stat-desc">Awaiting action</div>
             </div>
             <div class="stat-card">
-                <div class="stat-header"><span class="stat-title">In Progress</span><span class="stat-icon">⚙️</span></div>
+                <div class="stat-header"><span class="stat-title">In Progress</span><i data-lucide="settings-2" class="stat-icon"></i></div>
                 <div class="stat-value">${inProgress}</div>
                 <div class="stat-desc">Currently being addressed</div>
             </div>
             <div class="stat-card">
-                <div class="stat-header"><span class="stat-title">Resolved</span><span class="stat-icon">✓</span></div>
+                <div class="stat-header"><span class="stat-title">Resolved</span><i data-lucide="check-circle-2" class="stat-icon"></i></div>
                 <div class="stat-value">${resolved}</div>
                 <div class="stat-desc">Successfully addressed</div>
             </div>
@@ -142,9 +146,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             </div>
             <div class="overview-bar-container">
-                <div class="overview-bar-segment" style="width: ${resolvedPct}%; background-color: #22c55e;"></div>
-                <div class="overview-bar-segment" style="width: ${inProgressPct}%; background-color: #f97316;"></div>
-                <div class="overview-bar-segment" style="width: ${underReviewPct}%; background-color: #eab308;"></div>
+                <div class="overview-bar-segment" style="width: ${resolvedPct}%; background-color: var(--status-resolved-text);"></div>
+                <div class="overview-bar-segment" style="width: ${inProgressPct}%; background-color: var(--status-progress-text);"></div>
+                <div class="overview-bar-segment" style="width: ${underReviewPct}%; background-color: var(--status-review-text);"></div>
             </div>
         `;
 
@@ -159,10 +163,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // Recent Updates
         let upHtml = '';
         updatesData.forEach(update => {
-            const icon = statusMap[update.status] ? statusMap[update.status].icon : "•";
+            const iconName = statusMap[update.status] ? statusMap[update.status].icon : "circle";
+            const colorClass = statusMap[update.status] ? statusMap[update.status].dot : "";
             upHtml += `
             <a href="${update.link}" class="update-item">
-                <p class="update-text">${icon} ${update.message}</p>
+                <p class="update-text"><i data-lucide="${iconName}" class="inline-icon" style="color:var(--status-${update.status.split(' ')[0].toLowerCase()}-text, currentColor)"></i> ${update.message}</p>
                 <span class="update-time">${update.time}</span>
             </a>
             `;
@@ -170,12 +175,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("recent-updates-list").innerHTML = upHtml;
     }
 
-    // 2. Submit View Form Handler
+    // Submit View Form Handler
     const submitForm = document.getElementById("submit-feedback-form");
     submitForm.addEventListener("submit", (e) => {
         e.preventDefault();
         
-        // Generate random ID
         const randomId = "FB-" + Math.random().toString(36).substring(2, 7).toUpperCase();
         
         const newFeedback = {
@@ -192,10 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
             ]
         };
 
-        // Add to mock data
         feedbackData.push(newFeedback);
         
-        // Notification
         notificationData.unshift({
             id: `notif-${Date.now()}`,
             title: "Feedback Submitted",
@@ -204,14 +206,11 @@ document.addEventListener("DOMContentLoaded", () => {
             link: `#feedback/${randomId}`
         });
 
-        // Reset form & Navigate
         submitForm.reset();
         window.location.hash = "#dashboard";
-        
-        alert("Your feedback has been submitted anonymously! Tracking ID: " + randomId);
     });
 
-    // 3. History View
+    // History View
     function renderHistory() {
         const container = document.getElementById("history-list-container");
         if (feedbackData.length === 0) {
@@ -226,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
         container.innerHTML = html;
     }
 
-    // 4. Track View
+    // Track View
     const trackForm = document.getElementById("track-form");
     trackForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -237,16 +236,18 @@ document.addEventListener("DOMContentLoaded", () => {
         
         if (fb) {
             container.innerHTML = createFeedbackCardHTML(fb) + `
-                <a href="#feedback/${fb.id}" class="primary-cta no-underline" style="margin-top:16px; width:100%; text-align:center;">View Full Details & Timeline</a>
+                <a href="#feedback/${fb.id}" class="primary-cta no-underline" style="margin-top:24px; width:100%; text-align:center;">View Full Details</a>
             `;
             container.style.display = "block";
+            updateIcons();
         } else {
-            container.innerHTML = `<div class="empty-state"><h3 style="color:#ef4444;">ID Not Found</h3><p>We couldn't find any feedback matching "${inputId}". Please check the ID and try again.</p></div>`;
+            container.innerHTML = `<div class="empty-state"><h3 style="color:#ef4444;"><i data-lucide="alert-circle"></i> ID Not Found</h3><p>We couldn't find any feedback matching "${inputId}".</p></div>`;
             container.style.display = "block";
+            updateIcons();
         }
     });
 
-    // 5. Notifications View
+    // Notifications View
     function renderNotificationsPage() {
         const container = document.getElementById("notifications-page-list");
         let html = '';
@@ -264,7 +265,6 @@ document.addEventListener("DOMContentLoaded", () => {
         container.innerHTML = html;
     }
 
-    // Header Notification Dropdown Renderer
     function renderHeaderNotifications() {
         const list = document.getElementById("dropdown-notifications");
         document.getElementById("notification-badge").innerText = notificationData.length;
@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
         list.innerHTML = html;
     }
 
-    // 6. Feedback Details View
+    // Feedback Details View
     function renderFeedbackDetails(id) {
         const fb = feedbackData.find(f => f.id === id);
         const container = document.getElementById("details-container");
@@ -307,10 +307,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         container.innerHTML = `
-            <div class="feedback-card" style="margin-bottom: 24px;">
+            <div class="feedback-card" style="margin-bottom: 32px;">
                 <div class="fb-header">
                     <span class="fb-id">${fb.id}</span>
-                    <span class="status-badge ${statusStyle.class}">${statusStyle.icon} ${fb.status}</span>
+                    <span class="status-badge ${statusStyle.class}"><i data-lucide="${statusStyle.icon}"></i> ${fb.status}</span>
                 </div>
                 <div class="fb-meta">
                     <span class="meta-item">Category: <strong>${fb.category}</strong></span>
@@ -323,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             </div>
             
-            <h3>Activity Timeline</h3>
+            <h3 class="section-title">Activity Timeline</h3>
             <div class="details-timeline">
                 ${timelineHtml}
             </div>
@@ -347,8 +347,8 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="fb-preview">"${fb.preview}"</div>
             <div class="fb-footer">
-                <span class="status-badge ${statusStyle.class}">${statusStyle.icon} ${fb.status}</span>
-                <a href="#feedback/${fb.id}" class="btn-view-details">View Details</a>
+                <span class="status-badge ${statusStyle.class}"><i data-lucide="${statusStyle.icon}"></i> ${fb.status}</span>
+                <a href="#feedback/${fb.id}" class="btn-view-details">View Details <i data-lucide="chevron-right" class="inline-icon"></i></a>
             </div>
         </div>`;
     }
@@ -393,12 +393,9 @@ document.addEventListener("DOMContentLoaded", () => {
         notificationDropdown.classList.remove("show");
     });
     
-    // Close dropdowns on route changes inside the dropdown (like View All Notifications)
     viewAllNotifBtn.addEventListener("click", () => notificationDropdown.classList.remove("show"));
     
-    // Close dropdowns on outside click
     document.addEventListener("click", (e) => {
-        // Only close if not clicking on dropdown content, unless it's a link
         if (!notificationDropdown.contains(e.target) || e.target.tagName === 'A') {
             notificationDropdown.classList.remove("show");
         }
@@ -410,6 +407,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- INITIALIZATION ---
     renderHeaderNotifications();
-    handleRoute(); // Execute route immediately on load
-
+    handleRoute(); 
+    updateIcons();
 });

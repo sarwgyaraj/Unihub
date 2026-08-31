@@ -88,21 +88,18 @@ let updatesData = [
         status: "Resolved",
         message: "FB-4A17C was marked Resolved",
         time: "2 hours ago",
-        dotClass: "dot-resolved",
         link: "#feedback/FB-4A17C"
     },
     {
         status: "In Progress",
         message: "FB-8K42Q moved to In Progress",
         time: "Yesterday",
-        dotClass: "dot-progress",
         link: "#feedback/FB-8K42Q"
     },
     {
         status: "Under Review",
         message: "FB-9L21P is now Under Review",
         time: "2 days ago",
-        dotClass: "dot-review",
         link: "#feedback/FB-9L21P"
     }
 ];

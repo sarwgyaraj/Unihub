@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anonymous Student Feedback Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
@@ -13,42 +15,42 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <span class="portal-title">Student Campus Portal</span>
-            <span class="module-title">💬 Anonymous Feedback</span>
+            <span class="module-title"><i data-lucide="message-square-dashed"></i> Anonymous Feedback</span>
         </div>
         
         <nav class="sidebar-nav">
             <a href="#dashboard" class="nav-item active" data-view="dashboard">
-                <span class="nav-icon">🏠</span> Dashboard
+                <i data-lucide="layout-dashboard" class="nav-icon"></i> Dashboard
             </a>
             <a href="#submit" class="nav-item" data-view="submit">
-                <span class="nav-icon">📝</span> Submit Feedback
+                <i data-lucide="pen-line" class="nav-icon"></i> Submit Feedback
             </a>
             <a href="#history" class="nav-item" data-view="history">
-                <span class="nav-icon">📊</span> My Feedback
+                <i data-lucide="history" class="nav-icon"></i> My Feedback
             </a>
             <a href="#track" class="nav-item" data-view="track">
-                <span class="nav-icon">🔎</span> Track Feedback
+                <i data-lucide="search" class="nav-icon"></i> Track Feedback
             </a>
             
             <hr class="nav-divider">
             
             <a href="#notifications" class="nav-item" data-view="notifications">
-                <span class="nav-icon">🔔</span> Notifications
+                <i data-lucide="bell" class="nav-icon"></i> Notifications
             </a>
             <a href="#" class="nav-item">
-                <span class="nav-icon">👤</span> Profile
+                <i data-lucide="user" class="nav-icon"></i> Profile
             </a>
             <a href="#" class="nav-item">
-                <span class="nav-icon">⚙️</span> Settings
+                <i data-lucide="settings" class="nav-icon"></i> Settings
             </a>
             
             <hr class="nav-divider">
             
             <a href="#" class="nav-item back-portal">
-                <span class="nav-icon">←</span> Campus Portal
+                <i data-lucide="arrow-left" class="nav-icon"></i> Campus Portal
             </a>
             <a href="#" class="nav-item logout">
-                <span class="nav-icon">🚪</span> Logout
+                <i data-lucide="log-out" class="nav-icon"></i> Logout
             </a>
         </nav>
     </aside>
@@ -57,7 +59,7 @@
     <main class="main-content">
         <!-- Header -->
         <header class="top-header">
-            <button class="hamburger-btn" id="hamburger-btn">☰</button>
+            <button class="hamburger-btn" id="hamburger-btn"><i data-lucide="menu"></i></button>
             <div class="header-titles">
                 <h1>Anonymous Student Feedback</h1>
                 <p>Share your experience and help improve campus.</p>
@@ -66,7 +68,7 @@
             <div class="header-right">
                 <div class="notification-wrapper">
                     <button class="notification-icon" id="notification-btn" aria-label="Notifications">
-                        🔔<span class="notification-badge" id="notification-badge">3</span>
+                        <i data-lucide="bell"></i><span class="notification-badge" id="notification-badge">3</span>
                     </button>
                     <!-- Notification Dropdown -->
                     <div class="notification-dropdown" id="notification-dropdown">
@@ -90,9 +92,9 @@
                             <strong>Sarwgya Raj</strong><br>
                             <small>Student</small>
                         </div>
-                        <a href="#">Profile</a>
-                        <a href="#">Settings</a>
-                        <a href="#">Logout</a>
+                        <a href="#"><i data-lucide="user" class="dropdown-icon"></i> Profile</a>
+                        <a href="#"><i data-lucide="settings" class="dropdown-icon"></i> Settings</a>
+                        <a href="#"><i data-lucide="log-out" class="dropdown-icon"></i> Logout</a>
                     </div>
                 </div>
             </div>
@@ -105,18 +107,20 @@
                 <!-- Welcome Section -->
                 <section class="welcome-section">
                     <div class="welcome-text">
-                        <h2>Good afternoon, Sarwgya 👋</h2>
-                        <p>Your feedback can help make campus better.</p>
+                        <h2>Good afternoon, Sarwgya</h2>
+                        <p>Your feedback helps shape a better campus.</p>
                     </div>
-                    <a href="#submit" class="primary-cta no-underline" id="btn-submit-primary">+ Submit Anonymous Feedback</a>
+                    <a href="#submit" class="primary-cta no-underline" id="btn-submit-primary">
+                        <i data-lucide="plus" class="cta-icon"></i> Submit Feedback
+                    </a>
                 </section>
 
                 <!-- Privacy Card -->
                 <section class="privacy-card">
                     <div class="privacy-content">
-                        <h3>🔒 Your Privacy Matters</h3>
-                        <p>Your feedback is presented to authorized reviewers without your name or student ID.</p>
-                        <small>Your identity is kept separate from the reviewer-facing feedback record.</small>
+                        <h3><i data-lucide="shield-check" class="privacy-icon"></i> Your Privacy Matters</h3>
+                        <p>Feedback is presented to reviewers completely sanitized of personal data.</p>
+                        <small>Identities are securely detached from reviewer-facing records.</small>
                     </div>
                     <button class="secondary-btn" id="btn-how-anonymity-works">How anonymity works</button>
                 </section>
@@ -129,45 +133,37 @@
                 <!-- Middle Section: Quick Actions & Overview -->
                 <div class="middle-layout">
                     <div class="quick-actions-col">
-                        <h2>Quick Actions</h2>
+                        <h2 class="section-title">Quick Actions</h2>
                         <div class="quick-actions-grid">
                             <div class="quick-action-card">
-                                <div class="qa-icon">📝</div>
+                                <div class="qa-icon"><i data-lucide="search"></i></div>
                                 <div class="qa-content">
-                                    <h4>Submit Feedback</h4>
-                                    <p>Share an anonymous concern or suggestion</p>
-                                    <a href="#submit" class="qa-btn">Start Feedback</a>
+                                    <h4>Track</h4>
+                                    <p>Check submission status</p>
+                                    <a href="#track" class="qa-btn">Search</a>
                                 </div>
                             </div>
                             <div class="quick-action-card">
-                                <div class="qa-icon">🔎</div>
+                                <div class="qa-icon"><i data-lucide="history"></i></div>
                                 <div class="qa-content">
-                                    <h4>Track Feedback</h4>
-                                    <p>Check the status of an existing submission</p>
-                                    <a href="#track" class="qa-btn">Track Status</a>
+                                    <h4>History</h4>
+                                    <p>View past submissions</p>
+                                    <a href="#history" class="qa-btn">View</a>
                                 </div>
                             </div>
                             <div class="quick-action-card">
-                                <div class="qa-icon">📊</div>
+                                <div class="qa-icon"><i data-lucide="bell"></i></div>
                                 <div class="qa-content">
-                                    <h4>My Feedback</h4>
-                                    <p>View your previous submissions</p>
-                                    <a href="#history" class="qa-btn">View History</a>
-                                </div>
-                            </div>
-                            <div class="quick-action-card">
-                                <div class="qa-icon">🔔</div>
-                                <div class="qa-content">
-                                    <h4>Notifications</h4>
-                                    <p>See updates on your feedback</p>
-                                    <a href="#notifications" class="qa-btn">View Notifications</a>
+                                    <h4>Alerts</h4>
+                                    <p>See recent updates</p>
+                                    <a href="#notifications" class="qa-btn">View</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <div class="overview-col">
-                        <h2>Your Feedback Overview</h2>
+                        <h2 class="section-title">Overview</h2>
                         <div class="overview-card" id="overview-card">
                             <!-- Populated via JS -->
                         </div>
@@ -178,8 +174,8 @@
                 <div class="bottom-layout">
                     <div class="recent-feedback-col">
                         <div class="section-header">
-                            <h2>Recent Feedback</h2>
-                            <a href="#history" class="view-all-link">View All →</a>
+                            <h2 class="section-title">Recent Feedback</h2>
+                            <a href="#history" class="view-all-link">View All <i data-lucide="arrow-right" class="inline-icon"></i></a>
                         </div>
                         <div class="recent-feedback-list" id="recent-feedback-list">
                             <!-- Populated via JS -->
@@ -187,7 +183,7 @@
                     </div>
                     
                     <div class="recent-updates-col">
-                        <h2>Recent Updates</h2>
+                        <h2 class="section-title">Updates</h2>
                         <div class="recent-updates-list" id="recent-updates-list">
                             <!-- Populated via JS -->
                         </div>
@@ -198,8 +194,8 @@
             <!-- VIEW: SUBMIT FEEDBACK -->
             <div id="view-submit" class="app-view">
                 <div class="page-header">
-                    <h2>Submit Anonymous Feedback</h2>
-                    <p>Your submission is 100% anonymous. Your personal details will not be attached to this record.</p>
+                    <h2 class="section-title">Submit Anonymous Feedback</h2>
+                    <p>Your submission is cryptographically isolated from your identity.</p>
                 </div>
                 
                 <div class="form-card">
@@ -239,13 +235,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="submit-preview">Feedback Details *</label>
-                            <textarea id="submit-preview" rows="5" placeholder="Describe your concern or suggestion in detail..." required></textarea>
+                            <label for="submit-preview">Details *</label>
+                            <textarea id="submit-preview" rows="6" placeholder="Describe the situation in detail..." required></textarea>
                         </div>
                         
                         <div class="form-actions">
                             <a href="#dashboard" class="secondary-btn no-underline">Cancel</a>
-                            <button type="submit" class="primary-cta">Submit Anonymously</button>
+                            <button type="submit" class="primary-cta"><i data-lucide="send" class="cta-icon"></i> Submit Anonymously</button>
                         </div>
                     </form>
                 </div>
@@ -254,8 +250,8 @@
             <!-- VIEW: MY FEEDBACK (HISTORY) -->
             <div id="view-history" class="app-view">
                 <div class="page-header">
-                    <h2>My Feedback History</h2>
-                    <p>A list of all anonymous feedback submissions you have made.</p>
+                    <h2 class="section-title">My Feedback History</h2>
+                    <p>Tracking your contributions to campus improvement.</p>
                 </div>
                 
                 <div class="history-list" id="history-list-container">
@@ -266,14 +262,14 @@
             <!-- VIEW: TRACK FEEDBACK -->
             <div id="view-track" class="app-view">
                 <div class="page-header">
-                    <h2>Track Feedback</h2>
-                    <p>Enter your unique Feedback ID to track its current status and resolution timeline.</p>
+                    <h2 class="section-title">Track Feedback</h2>
+                    <p>Enter a Feedback ID to view its resolution timeline.</p>
                 </div>
 
                 <div class="track-card">
                     <form id="track-form" class="track-form">
                         <input type="text" id="track-id-input" placeholder="e.g. FB-8K42Q" required>
-                        <button type="submit" class="primary-cta">Search</button>
+                        <button type="submit" class="primary-cta"><i data-lucide="search" class="cta-icon"></i> Search</button>
                     </form>
                 </div>
 
@@ -285,8 +281,8 @@
             <!-- VIEW: NOTIFICATIONS -->
             <div id="view-notifications" class="app-view">
                 <div class="page-header">
-                    <h2>Notifications</h2>
-                    <p>Recent updates on your submitted feedback.</p>
+                    <h2 class="section-title">Notifications</h2>
+                    <p>Activity on your anonymous submissions.</p>
                 </div>
                 
                 <div class="notifications-page-list" id="notifications-page-list">
@@ -297,8 +293,8 @@
             <!-- VIEW: FEEDBACK DETAILS -->
             <div id="view-details" class="app-view">
                 <div class="page-header header-with-back">
-                    <a href="javascript:history.back()" class="back-link">← Back</a>
-                    <h2>Feedback Details</h2>
+                    <a href="javascript:history.back()" class="back-link"><i data-lucide="arrow-left" class="inline-icon"></i> Back</a>
+                    <h2 class="section-title">Feedback Details</h2>
                 </div>
                 
                 <div id="details-container">
@@ -312,32 +308,32 @@
     <!-- Modal for How Anonymity Works -->
     <div class="modal-overlay" id="anonymity-modal">
         <div class="modal-content">
-            <button class="modal-close" id="modal-close">×</button>
-            <h2>🔒 How Anonymity Works</h2>
+            <button class="modal-close" id="modal-close"><i data-lucide="x"></i></button>
+            <h2 class="section-title"><i data-lucide="shield-check" class="inline-icon"></i> How Anonymity Works</h2>
             <p>Your feedback is submitted through a secure process that separates your identity from the feedback text.</p>
             
             <div class="modal-split">
                 <div class="modal-list">
                     <h3>Reviewers can see:</h3>
                     <ul>
-                        <li>✓ Feedback category</li>
-                        <li>✓ Selected area</li>
-                        <li>✓ Rating</li>
-                        <li>✓ Feedback text</li>
-                        <li>✓ Suggestion</li>
-                        <li>✓ Severity</li>
-                        <li>✓ Submission date</li>
-                        <li>✓ Anonymous Feedback ID</li>
+                        <li><i data-lucide="check-circle-2"></i> Feedback category</li>
+                        <li><i data-lucide="check-circle-2"></i> Selected area</li>
+                        <li><i data-lucide="check-circle-2"></i> Rating</li>
+                        <li><i data-lucide="check-circle-2"></i> Feedback text</li>
+                        <li><i data-lucide="check-circle-2"></i> Suggestion</li>
+                        <li><i data-lucide="check-circle-2"></i> Severity</li>
+                        <li><i data-lucide="check-circle-2"></i> Submission date</li>
+                        <li><i data-lucide="check-circle-2"></i> Anonymous Feedback ID</li>
                     </ul>
                 </div>
                 <div class="modal-list">
                     <h3>Reviewers cannot see:</h3>
                     <ul class="red-list">
-                        <li>✕ Student name</li>
-                        <li>✕ Student ID</li>
-                        <li>✕ Email</li>
-                        <li>✕ Profile photo</li>
-                        <li>✕ Personal account information</li>
+                        <li><i data-lucide="x-circle"></i> Student name</li>
+                        <li><i data-lucide="x-circle"></i> Student ID</li>
+                        <li><i data-lucide="x-circle"></i> Email</li>
+                        <li><i data-lucide="x-circle"></i> Profile photo</li>
+                        <li><i data-lucide="x-circle"></i> Personal account info</li>
                     </ul>
                 </div>
             </div>
