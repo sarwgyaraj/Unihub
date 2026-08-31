@@ -58,6 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Shared
             case '#notifications': document.getElementById('view-notifications').classList.add('active'); renderNotificationsPage(); break;
+            case '#profile': document.getElementById('view-profile').classList.add('active'); break;
+            case '#settings': document.getElementById('view-settings').classList.add('active'); break;
             
             // Notes Routes
             case '#notes-overview': document.getElementById('view-notes-overview').classList.add('active'); renderNotesOverview(); break;

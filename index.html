@@ -15,15 +15,13 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header" style="position: relative;">
             <span class="portal-title">Student Campus Portal</span>
-            <span class="module-title"><i data-lucide="graduation-cap"></i> <span class="module-text">Campus Hub</span></span>
+            <span class="module-title"><i data-lucide="graduation-cap"></i> <span class="module-text">Uni Hub</span></span>
             <button id="sidebar-collapse-btn" class="sidebar-collapse-btn" aria-label="Toggle Sidebar"><i data-lucide="chevron-left"></i></button>
         </div>
         
         <nav class="sidebar-nav">
             <!-- New Global Navigation Layout -->
-            <a href="#" class="nav-item">
-                <i data-lucide="home" class="nav-icon"></i> <span class="module-text">Portal Dashboard</span>
-            </a>
+
             <a href="#assignments-dashboard" class="nav-item" data-view="assignments-dashboard">
                 <i data-lucide="calendar" class="nav-icon"></i> <span class="module-text">Assignment Deadlines</span>
             </a>
@@ -42,10 +40,10 @@
             <a href="#notifications" class="nav-item" data-view="notifications">
                 <i data-lucide="bell" class="nav-icon"></i> <span class="module-text">Notifications</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="#profile" class="nav-item" data-view="profile">
                 <i data-lucide="user" class="nav-icon"></i> <span class="module-text">Profile</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="#settings" class="nav-item" data-view="settings">
                 <i data-lucide="settings" class="nav-icon"></i> <span class="module-text">Settings</span>
             </a>
             
@@ -1123,6 +1121,87 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- VIEW: PROFILE -->
+            <div id="view-profile" class="app-view">
+                <div class="page-header">
+                    <h2 class="section-title">Your Profile</h2>
+                    <p>Manage your personal information and student details.</p>
+                </div>
+                <div class="card-bg" style="padding: 24px; max-width: 600px; margin-top: 24px;">
+                    <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 32px;">
+                        <div style="width: 80px; height: 80px; background-color: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700;">
+                            SR
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.5rem; margin-bottom: 4px;">Sarwgya Raj</h3>
+                            <p style="color: var(--text-muted);">B.Tech Computer Science &bull; 3rd Year</p>
+                        </div>
+                    </div>
+                    
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" value="Sarwgya Raj" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" value="sarwgya@campus.edu" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Student ID</label>
+                            <input type="text" value="CS2024-089" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Bio (Optional)</label>
+                            <textarea rows="3" placeholder="Tell us a little about yourself..."></textarea>
+                        </div>
+                        <button type="button" class="primary-cta" style="margin-top: 16px;">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- VIEW: SETTINGS -->
+            <div id="view-settings" class="app-view">
+                <div class="page-header">
+                    <h2 class="section-title">Settings</h2>
+                    <p>Configure your portal preferences and notification rules.</p>
+                </div>
+                <div class="card-bg" style="padding: 24px; max-width: 600px; margin-top: 24px;">
+                    <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Appearance</h3>
+                    <div class="form-group">
+                        <label>Theme</label>
+                        <select>
+                            <option value="dark">Dark Theme (Default)</option>
+                            <option value="light">Light Theme</option>
+                        </select>
+                    </div>
+                    
+                    <h3 style="font-size: 1.2rem; margin-bottom: 16px; margin-top: 32px;">Notifications</h3>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" checked>
+                            <span>Email me when an assignment is due soon</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" checked>
+                            <span>Email me when my anonymous feedback is updated</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox">
+                            <span>Browser push notifications</span>
+                        </label>
+                    </div>
+                    
+                    <h3 style="font-size: 1.2rem; margin-bottom: 16px; margin-top: 32px;">Privacy</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Your anonymous feedback is always secure. You can manage data sharing preferences here.</p>
+                    <button class="secondary-btn" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">Request Data Deletion</button>
+                    
+                    <hr class="nav-divider" style="margin: 32px 0;">
+                    
+                    <button type="button" class="primary-cta">Save Preferences</button>
                 </div>
             </div>
 
