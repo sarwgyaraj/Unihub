@@ -30,7 +30,7 @@
             <a href="#notes-overview" class="nav-item" data-view="notes-overview">
                 <i data-lucide="book-open" class="nav-icon"></i> <span class="module-text">Notes Exchange</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="#appointments-home" class="nav-item" data-view="appointments-home">
                 <i data-lucide="users" class="nav-icon"></i> <span class="module-text">Professor Appointments</span>
             </a>
             <a href="#dashboard" class="nav-item" data-view="dashboard">
@@ -111,6 +111,22 @@
                 <a href="#notes-saved" class="internal-nav-link" data-internal="notes-saved">Saved Notes</a>
                 <a href="#notes-my-uploads" class="internal-nav-link" data-internal="notes-my-uploads">My Uploads</a>
                 <a href="#notes-upload" class="internal-nav-link" data-internal="notes-upload">Upload Notes</a>
+            </div>
+        </nav>
+
+        <!-- Internal Module Navigation (Professor Appointments) -->
+        <nav class="module-internal-nav" id="appointments-internal-nav" style="display: none;">
+            <div class="internal-nav-container" style="display: flex; justify-content: space-between; width: 100%;">
+                <div style="display: flex; gap: var(--spacing-lg);">
+                    <a href="#appointments-home" class="internal-nav-link" data-internal="appointments-home">Home</a>
+                    <a href="#how-it-works" class="internal-nav-link" onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})">How It Works</a>
+                    <a href="#appointments-professors" class="internal-nav-link" data-internal="appointments-professors">Professors</a>
+                    <a href="#appointments-help" class="internal-nav-link" data-internal="appointments-help">Help</a>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                    <a href="#dashboard" class="internal-nav-link" style="font-size: 0.85rem;"><i data-lucide="arrow-left" class="inline-icon"></i> Back to Campus Portal</a>
+                    <a href="#appointments-book" class="primary-cta no-underline" style="padding: 8px 16px; font-size: 0.85rem;">Book Appointment</a>
+                </div>
             </div>
         </nav>
 
@@ -561,6 +577,368 @@
                 <div id="note-details-container">
                     <!-- Populated via JS -->
                 </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- MODULE: PROFESSOR APPOINTMENTS VIEWS       -->
+            <!-- ========================================== -->
+
+            <!-- VIEW: APPOINTMENTS HOME (LANDING PAGE) -->
+            <div id="view-appointments-home" class="app-view">
+                <!-- Hero Section -->
+                <section class="appointments-hero mb-section">
+                    <div class="hero-content">
+                        <span class="hero-eyebrow">PROFESSOR APPOINTMENTS</span>
+                        <h1 class="hero-title">Connect with the right professor.<br>At the right time.</h1>
+                        <p class="hero-subtitle">Find professors, check their availability, and schedule consultations without the back-and-forth.</p>
+                        <div class="hero-ctas">
+                            <a href="#appointments-professors" class="primary-cta no-underline">Find a Professor <i data-lucide="arrow-right" class="cta-icon" style="margin-right:0; margin-left:8px;"></i></a>
+                            <a href="#how-it-works" class="secondary-btn no-underline" onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})">How It Works</a>
+                        </div>
+                        <p class="hero-microcopy">Academic help, project guidance, career advice and more &mdash; all through one campus platform.</p>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="mock-card">
+                            <div class="mock-card-header">
+                                <span class="mock-eyebrow"><i data-lucide="calendar"></i> Upcoming Appointment</span>
+                            </div>
+                            <div class="mock-card-body">
+                                <h3>Dr. Ananya Sharma</h3>
+                                <p class="mock-role">Assistant Professor</p>
+                                <p class="mock-dept">Computer Science</p>
+                                <hr class="mock-divider">
+                                <ul class="mock-details">
+                                    <li><i data-lucide="calendar-days"></i> September 2, 2026</li>
+                                    <li><i data-lucide="clock"></i> 11:30 AM &ndash; 12:00 PM</li>
+                                    <li><i data-lucide="map-pin"></i> Faculty Room 204</li>
+                                </ul>
+                                <p class="mock-purpose">Project Guidance</p>
+                                <div class="mock-status"><span class="status-indicator confirmed"></span> Confirmed</div>
+                            </div>
+                            <div class="mock-card-footer">
+                                <button class="secondary-btn" style="width: 100%; justify-content: center;">View Appointment</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Search Section -->
+                <section class="quick-search-section mb-section">
+                    <h2 class="section-title text-center">Find a Professor</h2>
+                    <p class="section-subtitle text-center">Search by professor, subject or department.</p>
+                    
+                    <div class="prof-search-container">
+                        <div class="notes-search-bar prof-search-bar">
+                            <i data-lucide="search" class="search-icon"></i>
+                            <input type="text" id="prof-search-input" placeholder="Search professor, subject or department...">
+                            <button class="primary-cta" onclick="window.location.hash='#appointments-professors'">Search Professors <i data-lucide="arrow-right" class="cta-icon" style="margin-right:0; margin-left:8px;"></i></button>
+                        </div>
+                        <div class="quick-filters" style="justify-content: center;">
+                            <a href="#appointments-professors" class="qf-tag">Computer Science</a>
+                            <a href="#appointments-professors" class="qf-tag">Mathematics</a>
+                            <a href="#appointments-professors" class="qf-tag">Physics</a>
+                            <a href="#appointments-professors" class="qf-tag">Electronics</a>
+                            <a href="#appointments-professors" class="qf-tag">Mechanical</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Available Professors Section -->
+                <section class="available-professors-section mb-section">
+                    <h2 class="section-title text-center">Meet Your Professors</h2>
+                    <p class="section-subtitle text-center">Find faculty members and see their next available consultation slot.</p>
+                    
+                    <div class="prof-cards-grid">
+                        <!-- Card 1 -->
+                        <div class="prof-card">
+                            <div class="prof-avatar">👩&zwj;🏫</div>
+                            <h3>Dr. Ananya Sharma</h3>
+                            <p class="prof-role">Assistant Professor</p>
+                            <p class="prof-dept">Computer Science</p>
+                            <div class="prof-subjects">
+                                <span>Data Structures</span><span>Algorithms</span>
+                            </div>
+                            <div class="prof-availability">
+                                <div class="avail-status avail-now"><span class="dot"></span> Available Today</div>
+                                <div class="avail-next">Next available: 11:30 AM</div>
+                            </div>
+                            <a href="#appointments-professors" class="secondary-btn btn-full">View Profile <i data-lucide="arrow-right" class="inline-icon" style="margin-left: 4px;"></i></a>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="prof-card">
+                            <div class="prof-avatar">👨&zwj;🏫</div>
+                            <h3>Dr. Rajesh Kumar</h3>
+                            <p class="prof-role">Associate Professor</p>
+                            <p class="prof-dept">Mathematics</p>
+                            <div class="prof-subjects">
+                                <span>Calculus</span><span>Linear Algebra</span>
+                            </div>
+                            <div class="prof-availability">
+                                <div class="avail-status avail-now"><span class="dot"></span> Available Today</div>
+                                <div class="avail-next">Next available: 2:00 PM</div>
+                            </div>
+                            <a href="#appointments-professors" class="secondary-btn btn-full">View Profile <i data-lucide="arrow-right" class="inline-icon" style="margin-left: 4px;"></i></a>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="prof-card">
+                            <div class="prof-avatar">👩&zwj;🔬</div>
+                            <h3>Dr. Priya Mehta</h3>
+                            <p class="prof-role">Assistant Professor</p>
+                            <p class="prof-dept">Physics</p>
+                            <div class="prof-subjects">
+                                <span>Engineering Physics</span><span>Applied Physics</span>
+                            </div>
+                            <div class="prof-availability">
+                                <div class="avail-status avail-now"><span class="dot"></span> Available Today</div>
+                                <div class="avail-next">Next available: 3:30 PM</div>
+                            </div>
+                            <a href="#appointments-professors" class="secondary-btn btn-full">View Profile <i data-lucide="arrow-right" class="inline-icon" style="margin-left: 4px;"></i></a>
+                        </div>
+                        <!-- Card 4 -->
+                        <div class="prof-card">
+                            <div class="prof-avatar">👨&zwj;💻</div>
+                            <h3>Dr. Vikram Singh</h3>
+                            <p class="prof-role">Associate Professor</p>
+                            <p class="prof-dept">Electronics</p>
+                            <div class="prof-subjects">
+                                <span>Digital Electronics</span><span>Circuit Theory</span>
+                            </div>
+                            <div class="prof-availability">
+                                <div class="avail-status avail-week"><span class="dot dot-week"></span> Available This Week</div>
+                                <div class="avail-next">Next available: Tomorrow, 10:00 AM</div>
+                            </div>
+                            <a href="#appointments-professors" class="secondary-btn btn-full">View Profile <i data-lucide="arrow-right" class="inline-icon" style="margin-left: 4px;"></i></a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- How It Works Section -->
+                <section id="how-it-works" class="how-it-works-section mb-section">
+                    <h2 class="section-title text-center">How Professor Appointments Work</h2>
+                    <p class="section-subtitle text-center">From finding a professor to completing your consultation, everything happens in one place.</p>
+                    
+                    <div class="steps-container">
+                        <div class="step-card">
+                            <div class="step-number">01 &mdash; FIND</div>
+                            <h3>Find Your Professor</h3>
+                            <p>Search by professor, subject, department or availability.</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">02 &mdash; CHOOSE</div>
+                            <h3>Pick a Convenient Slot</h3>
+                            <p>View the professor's availability and choose an open date and time.</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">03 &mdash; REQUEST</div>
+                            <h3>Tell Them What You Need</h3>
+                            <p>Select your appointment purpose and briefly explain what you'd like to discuss.</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">04 &mdash; MEET</div>
+                            <h3>Connect and Get Things Done</h3>
+                            <p>Attend your appointment online or in person.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Appointment Types Section -->
+                <section class="appt-types-section mb-section">
+                    <h2 class="section-title text-center">What Can You Book a Consultation For?</h2>
+                    
+                    <div class="types-grid">
+                        <div class="type-card">
+                            <div class="type-icon-wrapper"><i data-lucide="lightbulb" class="type-icon"></i></div>
+                            <h3>Doubt Clarification</h3>
+                            <p>Get help understanding a difficult topic.</p>
+                        </div>
+                        <div class="type-card">
+                            <div class="type-icon-wrapper"><i data-lucide="file-edit" class="type-icon"></i></div>
+                            <h3>Assignment Discussion</h3>
+                            <p>Discuss an assignment or academic problem.</p>
+                        </div>
+                        <div class="type-card">
+                            <div class="type-icon-wrapper"><i data-lucide="rocket" class="type-icon"></i></div>
+                            <h3>Project Guidance</h3>
+                            <p>Get guidance on your project or implementation.</p>
+                        </div>
+                        <div class="type-card">
+                            <div class="type-icon-wrapper"><i data-lucide="graduation-cap" class="type-icon"></i></div>
+                            <h3>Academic Advice</h3>
+                            <p>Discuss academic planning and decisions.</p>
+                        </div>
+                        <div class="type-card">
+                            <div class="type-icon-wrapper"><i data-lucide="briefcase" class="type-icon"></i></div>
+                            <h3>Career Guidance</h3>
+                            <p>Talk about career paths and opportunities.</p>
+                        </div>
+                        <div class="type-card">
+                            <div class="type-icon-wrapper"><i data-lucide="microscope" class="type-icon"></i></div>
+                            <h3>Research Discussion</h3>
+                            <p>Discuss research ideas and opportunities.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Availability Preview Section -->
+                <section class="availability-preview-section mb-section">
+                    <h2 class="section-title text-center">See Availability Before You Book</h2>
+                    <p class="section-subtitle text-center">Choose a date and select from available consultation slots.</p>
+                    
+                    <div class="calendar-preview-card">
+                        <div class="cal-header">September 2026</div>
+                        <div class="cal-weekdays">
+                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span>
+                        </div>
+                        <div class="cal-days">
+                            <span>1</span><span class="cal-active">2</span><span>3</span><span>4</span><span>5</span>
+                        </div>
+                        <hr class="cal-divider">
+                        <div class="cal-selected-date">Selected date: <strong>September 2</strong></div>
+                        <div class="cal-slots">
+                            <div class="cal-slot booked">10:00 AM &mdash; Booked</div>
+                            <div class="cal-slot booked">10:30 AM &mdash; Booked</div>
+                            <div class="cal-slot available">11:00 AM &mdash; Available</div>
+                            <div class="cal-slot available">11:30 AM &mdash; Available</div>
+                            <div class="cal-slot booked">12:00 PM &mdash; Booked</div>
+                            <div class="cal-slot available">2:00 PM &mdash; Available</div>
+                            <div class="cal-slot available">2:30 PM &mdash; Available</div>
+                            <div class="cal-slot available">3:00 PM &mdash; Available</div>
+                        </div>
+                        <div class="cal-footer">
+                            <a href="#appointments-professors" class="view-all-link">View Full Availability <i data-lucide="arrow-right" class="inline-icon"></i></a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Appointment Lifecycle Section -->
+                <section class="lifecycle-section mb-section">
+                    <h2 class="section-title text-center">From Request to Meeting</h2>
+                    <div class="lifecycle-timeline">
+                        <div class="timeline-step">
+                            <div class="tl-icon"><i data-lucide="send"></i></div>
+                            <div class="tl-text">Request</div>
+                        </div>
+                        <div class="tl-arrow"><i data-lucide="arrow-right"></i></div>
+                        <div class="timeline-step">
+                            <div class="tl-icon tl-pending">🟡</div>
+                            <div class="tl-text">Pending</div>
+                        </div>
+                        <div class="tl-arrow"><i data-lucide="arrow-right"></i></div>
+                        <div class="timeline-step">
+                            <div class="tl-icon"><i data-lucide="user-check"></i></div>
+                            <div class="tl-text">Professor Reviews</div>
+                        </div>
+                        <div class="tl-arrow"><i data-lucide="arrow-right"></i></div>
+                        <div class="timeline-step">
+                            <div class="tl-icon tl-confirmed">🟢</div>
+                            <div class="tl-text">Confirmed</div>
+                        </div>
+                        <div class="tl-arrow"><i data-lucide="arrow-right"></i></div>
+                        <div class="timeline-step">
+                            <div class="tl-icon"><i data-lucide="bell"></i></div>
+                            <div class="tl-text">Reminder</div>
+                        </div>
+                        <div class="tl-arrow"><i data-lucide="arrow-right"></i></div>
+                        <div class="timeline-step">
+                            <div class="tl-icon"><i data-lucide="calendar"></i></div>
+                            <div class="tl-text">Appointment</div>
+                        </div>
+                        <div class="tl-arrow"><i data-lucide="arrow-right"></i></div>
+                        <div class="timeline-step">
+                            <div class="tl-icon tl-completed">🔵</div>
+                            <div class="tl-text">Completed</div>
+                        </div>
+                    </div>
+                    <p class="lifecycle-note text-center">Other outcomes are possible: <span style="color:#f97316;">🟠 Rescheduled</span>, <span style="color:#ef4444;">🔴 Rejected</span>, or Cancelled.</p>
+                </section>
+
+                <!-- Meeting Modes Section -->
+                <section class="meeting-modes-section mb-section">
+                    <h2 class="section-title text-center">Meet the Way That Works for You</h2>
+                    <div class="modes-grid">
+                        <div class="mode-card">
+                            <div class="mode-icon"><i data-lucide="map-pin"></i></div>
+                            <h3>In Person</h3>
+                            <p>Meet your professor at their office, faculty room or designated campus location.</p>
+                            <div class="mode-example">Example:<br><strong>Faculty Room 204</strong></div>
+                        </div>
+                        <div class="mode-card mode-card-online">
+                            <div class="mode-icon"><i data-lucide="laptop"></i></div>
+                            <h3>Online</h3>
+                            <p>Join your consultation through a generated online meeting link.</p>
+                            <div class="mode-example">Example:<br><strong>Online Meeting</strong></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Convenience Features Section -->
+                <section class="convenience-section mb-section">
+                    <h2 class="section-title text-center">Designed Around Your Schedule</h2>
+                    <div class="features-grid">
+                        <div class="feature-item"><i data-lucide="check" class="feat-icon"></i> <span><strong>Real-Time Availability</strong> &mdash; See open appointment slots before requesting a meeting.</span></div>
+                        <div class="feature-item"><i data-lucide="check" class="feat-icon"></i> <span><strong>No Double Booking</strong> &mdash; A professor's confirmed slot cannot be booked by another student.</span></div>
+                        <div class="feature-item"><i data-lucide="check" class="feat-icon"></i> <span><strong>Appointment Reminders</strong> &mdash; Receive notifications before your consultation.</span></div>
+                        <div class="feature-item"><i data-lucide="check" class="feat-icon"></i> <span><strong>Easy Rescheduling</strong> &mdash; Move an appointment when plans change.</span></div>
+                        <div class="feature-item"><i data-lucide="check" class="feat-icon"></i> <span><strong>Appointment History</strong> &mdash; Keep track of completed and past consultations.</span></div>
+                        <div class="feature-item"><i data-lucide="check" class="feat-icon"></i> <span><strong>Calendar Support</strong> &mdash; Add confirmed appointments to your calendar.</span></div>
+                    </div>
+                </section>
+
+                <!-- Student Experience Preview Section -->
+                <section class="student-experience-section mb-section">
+                    <h2 class="section-title text-center">Your Appointments at a Glance</h2>
+                    <div class="exp-preview-card">
+                        <div class="exp-header">My Appointments</div>
+                        <div class="exp-tabs">
+                            <span class="exp-tab active">Upcoming</span>
+                            <span class="exp-tab">Past</span>
+                        </div>
+                        <div class="exp-item">
+                            <div class="exp-item-main">
+                                <h4>Dr. Ananya Sharma</h4>
+                                <p class="exp-subj">Data Structures</p>
+                                <div class="exp-time">
+                                    <i data-lucide="calendar"></i> September 2, 11:30 AM &ndash; 12:00 PM
+                                </div>
+                                <div class="exp-purpose">Project Guidance</div>
+                                <div class="mock-status"><span class="status-indicator confirmed"></span> Confirmed</div>
+                            </div>
+                            <div class="exp-item-actions">
+                                <button class="secondary-btn">View Details</button>
+                                <button class="secondary-btn">Reschedule</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Final CTA Section -->
+                <section class="final-cta-section mb-section" style="margin-top: 60px;">
+                    <h2 class="section-title text-center">Need help from a professor?</h2>
+                    <p class="section-subtitle text-center">Find the right faculty member and book a time that works for you.</p>
+                    <div class="final-cta-actions text-center" style="margin-top: 24px;">
+                        <a href="#appointments-professors" class="primary-cta no-underline" style="margin-right: 16px;">Find a Professor <i data-lucide="arrow-right" class="cta-icon" style="margin-right:0; margin-left:8px;"></i></a>
+                        <a href="#appointments-my" class="secondary-btn no-underline">View My Appointments</a>
+                    </div>
+                </section>
+
+                <!-- Appointments Footer -->
+                <footer class="appointments-footer">
+                    <div class="footer-brand">
+                        <strong>Student Campus Management & Collaboration Portal</strong>
+                        <p>Professor Appointments</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#appointments-home">Home</a>
+                        <a href="#how-it-works" onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})">How It Works</a>
+                        <a href="#appointments-professors">Professors</a>
+                        <a href="#appointments-help">Help</a>
+                        <a href="#">Privacy</a>
+                        <a href="#">Settings</a>
+                    </div>
+                    <div class="footer-back">
+                        <a href="#dashboard" class="secondary-btn no-underline"><i data-lucide="arrow-left" class="inline-icon"></i> Back to Campus Portal</a>
+                    </div>
+                </footer>
             </div>
 
         </div>

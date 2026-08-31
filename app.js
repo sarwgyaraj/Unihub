@@ -35,11 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
             param = hash.split('/')[1];
         }
 
-        // Determine Module based on route to handle global UI updates
         const notesRoutes = ['#notes-overview', '#notes-browse', '#notes-saved', '#notes-upload', '#notes-my-uploads', '#note'];
         const feedbackRoutes = ['#dashboard', '#submit', '#history', '#track', '#feedback'];
+        const appointmentsRoutes = ['#appointments-home'];
         
         if (notesRoutes.includes(route)) currentModule = 'notes';
+        else if (appointmentsRoutes.includes(route)) currentModule = 'appointments';
         else if (feedbackRoutes.includes(route)) currentModule = 'feedback';
 
         updateGlobalHeaderAndNav();
@@ -64,6 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
             case '#notes-my-uploads': document.getElementById('view-notes-my-uploads').classList.add('active'); renderNotesMyUploads(); break;
             case '#note': document.getElementById('view-notes-details').classList.add('active'); renderNoteDetails(param); break;
             
+            // Appointments Routes
+            case '#appointments-home': document.getElementById('view-appointments-home').classList.add('active'); break;
+            
             default: document.getElementById('view-dashboard').classList.add('active'); renderFeedbackDashboard();
         }
 
@@ -79,17 +83,24 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll('.sidebar-nav .nav-item').forEach(el => el.classList.remove('active'));
         
         if (currentModule === 'notes') {
-            internalNav.style.display = 'block';
+            document.getElementById('notes-internal-nav').style.display = 'block';
+            document.getElementById('appointments-internal-nav').style.display = 'none';
             headerTitles.innerHTML = `<h1>Notes Exchange</h1><p>Find, share and discover notes from your campus community.</p>`;
             document.querySelector('.sidebar-nav .nav-item[data-view="notes-overview"]').classList.add('active');
             
             // Update internal nav highlighting
-            document.querySelectorAll('.internal-nav-link').forEach(el => el.classList.remove('active'));
-            let activeInternal = document.querySelector(`.internal-nav-link[href="${window.location.hash}"]`);
+            document.querySelectorAll('#notes-internal-nav .internal-nav-link').forEach(el => el.classList.remove('active'));
+            let activeInternal = document.querySelector(`#notes-internal-nav .internal-nav-link[href="${window.location.hash}"]`);
             if (activeInternal) activeInternal.classList.add('active');
             
+        } else if (currentModule === 'appointments') {
+            document.getElementById('notes-internal-nav').style.display = 'none';
+            document.getElementById('appointments-internal-nav').style.display = 'block';
+            headerTitles.innerHTML = `<h1>Professor Appointments</h1><p>Connect with the right professor. At the right time.</p>`;
+            document.querySelector('.sidebar-nav .nav-item[data-view="appointments-home"]').classList.add('active');
         } else {
-            internalNav.style.display = 'none';
+            document.getElementById('notes-internal-nav').style.display = 'none';
+            document.getElementById('appointments-internal-nav').style.display = 'none';
             headerTitles.innerHTML = `<h1>Anonymous Student Feedback</h1><p>Share your experience and help improve campus.</p>`;
             document.querySelector('.sidebar-nav .nav-item[data-view="dashboard"]').classList.add('active');
         }
