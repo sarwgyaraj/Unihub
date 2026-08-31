@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anonymous Student Feedback Dashboard</title>
+    <title>Student Campus Portal</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
@@ -11,65 +11,67 @@
 </head>
 <body>
 
-    <!-- Sidebar -->
+    <!-- Global Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header" style="position: relative;">
             <span class="portal-title">Student Campus Portal</span>
-            <span class="module-title"><i data-lucide="message-square-dashed"></i> <span class="module-text">Anonymous Feedback</span></span>
+            <span class="module-title"><i data-lucide="graduation-cap"></i> <span class="module-text">Campus Hub</span></span>
             <button id="sidebar-collapse-btn" class="sidebar-collapse-btn" aria-label="Toggle Sidebar"><i data-lucide="chevron-left"></i></button>
         </div>
         
         <nav class="sidebar-nav">
-            <a href="#dashboard" class="nav-item active" data-view="dashboard">
-                <i data-lucide="layout-dashboard" class="nav-icon"></i> Dashboard
+            <!-- New Global Navigation Layout -->
+            <a href="#" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i> <span class="module-text">Portal Dashboard</span>
             </a>
-            <a href="#submit" class="nav-item" data-view="submit">
-                <i data-lucide="pen-line" class="nav-icon"></i> Submit Feedback
+            <a href="#" class="nav-item">
+                <i data-lucide="calendar" class="nav-icon"></i> <span class="module-text">Assignment Deadlines</span>
             </a>
-            <a href="#history" class="nav-item" data-view="history">
-                <i data-lucide="history" class="nav-icon"></i> My Feedback
+            <a href="#notes-overview" class="nav-item" data-view="notes-overview">
+                <i data-lucide="book-open" class="nav-icon"></i> <span class="module-text">Notes Exchange</span>
             </a>
-            <a href="#track" class="nav-item" data-view="track">
-                <i data-lucide="search" class="nav-icon"></i> Track Feedback
+            <a href="#" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i> <span class="module-text">Professor Appointments</span>
+            </a>
+            <a href="#dashboard" class="nav-item" data-view="dashboard">
+                <i data-lucide="message-square-dashed" class="nav-icon"></i> <span class="module-text">Anonymous Feedback</span>
             </a>
             
             <hr class="nav-divider">
             
             <a href="#notifications" class="nav-item" data-view="notifications">
-                <i data-lucide="bell" class="nav-icon"></i> Notifications
+                <i data-lucide="bell" class="nav-icon"></i> <span class="module-text">Notifications</span>
             </a>
             <a href="#" class="nav-item">
-                <i data-lucide="user" class="nav-icon"></i> Profile
+                <i data-lucide="user" class="nav-icon"></i> <span class="module-text">Profile</span>
             </a>
             <a href="#" class="nav-item">
-                <i data-lucide="settings" class="nav-icon"></i> Settings
+                <i data-lucide="settings" class="nav-icon"></i> <span class="module-text">Settings</span>
             </a>
             
             <hr class="nav-divider">
             
-            <a href="#" class="nav-item back-portal">
-                <i data-lucide="arrow-left" class="nav-icon"></i> Campus Portal
-            </a>
             <a href="#" class="nav-item logout">
-                <i data-lucide="log-out" class="nav-icon"></i> Logout
+                <i data-lucide="log-out" class="nav-icon"></i> <span class="module-text">Logout</span>
             </a>
         </nav>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Header -->
+        <!-- Global Header -->
         <header class="top-header">
             <button class="hamburger-btn" id="hamburger-btn"><i data-lucide="menu"></i></button>
-            <div class="header-titles">
-                <h1>Anonymous Student Feedback</h1>
-                <p>Share your experience and help improve campus.</p>
+            <div class="header-titles" id="dynamic-header-titles">
+                <!-- Dynamically updated by JS based on module -->
+                <h1>Campus Portal</h1>
+                <p>Collaborate, Learn, and Improve.</p>
             </div>
             
             <div class="header-right">
                 <div class="notification-wrapper">
                     <button class="notification-icon" id="notification-btn" aria-label="Notifications">
-                        <i data-lucide="bell"></i><span class="notification-badge" id="notification-badge">3</span>
+                        <i data-lucide="bell"></i><span class="notification-badge" id="notification-badge">0</span>
                     </button>
                     <!-- Notification Dropdown -->
                     <div class="notification-dropdown" id="notification-dropdown">
@@ -101,11 +103,25 @@
             </div>
         </header>
 
+        <!-- Internal Module Navigation (Notes Exchange) -->
+        <nav class="module-internal-nav" id="notes-internal-nav" style="display: none;">
+            <div class="internal-nav-container">
+                <a href="#notes-overview" class="internal-nav-link" data-internal="notes-overview">Overview</a>
+                <a href="#notes-browse" class="internal-nav-link" data-internal="notes-browse">Browse Notes</a>
+                <a href="#notes-saved" class="internal-nav-link" data-internal="notes-saved">Saved Notes</a>
+                <a href="#notes-my-uploads" class="internal-nav-link" data-internal="notes-my-uploads">My Uploads</a>
+                <a href="#notes-upload" class="internal-nav-link" data-internal="notes-upload">Upload Notes</a>
+            </div>
+        </nav>
+
         <div class="dashboard-scroll-area" id="main-scroll-area">
             
-            <!-- VIEW: DASHBOARD -->
-            <div id="view-dashboard" class="app-view active">
-                <!-- Welcome Section -->
+            <!-- ========================================== -->
+            <!-- MODULE: ANONYMOUS FEEDBACK VIEWS           -->
+            <!-- ========================================== -->
+
+            <!-- VIEW: DASHBOARD (Feedback) -->
+            <div id="view-dashboard" class="app-view">
                 <section class="welcome-section">
                     <div class="welcome-text">
                         <h2>Good afternoon, Sarwgya</h2>
@@ -115,8 +131,6 @@
                         <i data-lucide="plus" class="cta-icon"></i> Submit Feedback
                     </a>
                 </section>
-
-                <!-- Privacy Card -->
                 <section class="privacy-card">
                     <div class="privacy-content">
                         <h3><i data-lucide="shield-check" class="privacy-icon"></i> Your Privacy Matters</h3>
@@ -125,13 +139,7 @@
                     </div>
                     <button class="secondary-btn" id="btn-how-anonymity-works">How anonymity works</button>
                 </section>
-
-                <!-- Statistics -->
-                <section class="statistics-grid" id="statistics-grid">
-                    <!-- Populated via JS -->
-                </section>
-
-                <!-- Middle Section: Quick Actions & Overview -->
+                <section class="statistics-grid" id="statistics-grid"></section>
                 <div class="middle-layout">
                     <div class="quick-actions-col">
                         <h2 class="section-title">Quick Actions</h2>
@@ -162,35 +170,25 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="overview-col">
                         <h2 class="section-title">Overview</h2>
-                        <div class="overview-card" id="overview-card">
-                            <!-- Populated via JS -->
-                        </div>
+                        <div class="overview-card" id="overview-card"></div>
                     </div>
                 </div>
-
-                <!-- Bottom Section: Recent Feedback & Recent Updates -->
                 <div class="bottom-layout">
                     <div class="recent-feedback-col">
                         <div class="section-header">
                             <h2 class="section-title">Recent Feedback</h2>
                             <a href="#history" class="view-all-link">View All <i data-lucide="arrow-right" class="inline-icon"></i></a>
                         </div>
-                        <div class="recent-feedback-list" id="recent-feedback-list">
-                            <!-- Populated via JS -->
-                        </div>
+                        <div class="recent-feedback-list" id="recent-feedback-list"></div>
                     </div>
-                    
                     <div class="recent-updates-col">
                         <h2 class="section-title">Updates</h2>
-                        <div class="recent-updates-list" id="recent-updates-list">
-                            <!-- Populated via JS -->
-                        </div>
+                        <div class="recent-updates-list" id="recent-updates-list"></div>
                     </div>
                 </div>
-            </div> <!-- End Dashboard View -->
+            </div>
 
             <!-- VIEW: SUBMIT FEEDBACK -->
             <div id="view-submit" class="app-view">
@@ -198,7 +196,6 @@
                     <h2 class="section-title">Submit Anonymous Feedback</h2>
                     <p>Your submission is cryptographically isolated from your identity.</p>
                 </div>
-                
                 <div class="form-card">
                     <form id="submit-feedback-form">
                         <div class="form-row">
@@ -219,7 +216,6 @@
                                 <input type="text" id="submit-area" placeholder="e.g. Study Spaces" required>
                             </div>
                         </div>
-                        
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="submit-severity">Severity</label>
@@ -234,19 +230,17 @@
                                 <input type="number" id="submit-rating" min="1" max="5" value="3" required>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label for="submit-preview">Details *</label>
                             <textarea id="submit-preview" rows="6" placeholder="Describe the situation in detail..." required></textarea>
                         </div>
-                        
                         <div class="form-actions">
                             <a href="#dashboard" class="secondary-btn no-underline">Cancel</a>
                             <button type="submit" class="primary-cta"><i data-lucide="send" class="cta-icon"></i> Submit Anonymously</button>
                         </div>
                     </form>
                 </div>
-            </div> <!-- End Submit View -->
+            </div>
 
             <!-- VIEW: MY FEEDBACK (HISTORY) -->
             <div id="view-history" class="app-view">
@@ -254,11 +248,8 @@
                     <h2 class="section-title">My Feedback History</h2>
                     <p>Tracking your contributions to campus improvement.</p>
                 </div>
-                
-                <div class="history-list" id="history-list-container">
-                    <!-- Populated via JS -->
-                </div>
-            </div> <!-- End History View -->
+                <div class="history-list" id="history-list-container"></div>
+            </div>
 
             <!-- VIEW: TRACK FEEDBACK -->
             <div id="view-track" class="app-view">
@@ -266,30 +257,23 @@
                     <h2 class="section-title">Track Feedback</h2>
                     <p>Enter a Feedback ID to view its resolution timeline.</p>
                 </div>
-
                 <div class="track-card">
                     <form id="track-form" class="track-form">
                         <input type="text" id="track-id-input" placeholder="e.g. FB-8K42Q" required>
                         <button type="submit" class="primary-cta"><i data-lucide="search" class="cta-icon"></i> Search</button>
                     </form>
                 </div>
-
-                <div id="track-result-container" class="track-result-container" style="display: none;">
-                    <!-- Populated via JS -->
-                </div>
-            </div> <!-- End Track View -->
+                <div id="track-result-container" class="track-result-container" style="display: none;"></div>
+            </div>
 
             <!-- VIEW: NOTIFICATIONS -->
             <div id="view-notifications" class="app-view">
                 <div class="page-header">
                     <h2 class="section-title">Notifications</h2>
-                    <p>Activity on your anonymous submissions.</p>
+                    <p>Activity on your anonymous submissions and notes.</p>
                 </div>
-                
-                <div class="notifications-page-list" id="notifications-page-list">
-                    <!-- Populated via JS -->
-                </div>
-            </div> <!-- End Notifications View -->
+                <div class="notifications-page-list" id="notifications-page-list"></div>
+            </div>
 
             <!-- VIEW: FEEDBACK DETAILS -->
             <div id="view-details" class="app-view">
@@ -297,11 +281,287 @@
                     <a href="javascript:history.back()" class="back-link"><i data-lucide="arrow-left" class="inline-icon"></i> Back</a>
                     <h2 class="section-title">Feedback Details</h2>
                 </div>
+                <div id="details-container"></div>
+            </div>
+
+
+            <!-- ========================================== -->
+            <!-- MODULE: NOTES EXCHANGE VIEWS               -->
+            <!-- ========================================== -->
+
+            <!-- VIEW: NOTES OVERVIEW -->
+            <div id="view-notes-overview" class="app-view active">
                 
-                <div id="details-container">
+                <!-- Hero Search -->
+                <section class="notes-hero">
+                    <h2>Find the notes you need</h2>
+                    <div class="notes-search-bar">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <input type="text" id="hero-notes-search" placeholder="Search by subject, topic, semester or keyword...">
+                        <button class="primary-cta" onclick="window.location.hash='#notes-browse'">Search</button>
+                    </div>
+                    <div class="quick-filters">
+                        <span>Quick filters:</span>
+                        <a href="#notes-browse" class="qf-tag">All</a>
+                        <a href="#notes-browse" class="qf-tag">CSE</a>
+                        <a href="#notes-browse" class="qf-tag">ECE</a>
+                        <a href="#notes-browse" class="qf-tag">Mechanical</a>
+                        <a href="#notes-browse" class="qf-tag">Civil</a>
+                    </div>
+                </section>
+
+                <!-- Statistics -->
+                <section class="statistics-grid" id="notes-stats-grid">
+                    <!-- Populated via JS -->
+                </section>
+
+                <!-- Browse by Subject -->
+                <section class="mb-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Browse by Subject</h2>
+                    </div>
+                    <div class="subject-cards-grid" id="subject-cards-grid">
+                        <!-- Populated via JS -->
+                    </div>
+                </section>
+
+                <!-- Recently Added Notes -->
+                <section class="mb-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Recently Added</h2>
+                        <a href="#notes-browse" class="view-all-link">View All <i data-lucide="arrow-right" class="inline-icon"></i></a>
+                    </div>
+                    <div class="notes-grid" id="recent-notes-list">
+                        <!-- Populated via JS -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- VIEW: BROWSE NOTES (SEARCH/FILTER) -->
+            <div id="view-notes-browse" class="app-view">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h2 class="section-title">Browse Notes</h2>
+                        <p>Search and filter academic resources.</p>
+                    </div>
+                    <div class="sort-dropdown">
+                        <label>Sort by:</label>
+                        <select id="notes-sort-select">
+                            <option value="newest">Newest</option>
+                            <option value="downloads">Most Downloaded</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="saves">Most Saved</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="browse-layout">
+                    <!-- Filters Sidebar -->
+                    <div class="filters-sidebar">
+                        <div class="filter-group">
+                            <label>Branch</label>
+                            <select id="filter-branch">
+                                <option value="">All Branches</option>
+                                <option value="CSE">CSE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Semester</label>
+                            <select id="filter-semester">
+                                <option value="">All Semesters</option>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                                <option value="5">Semester 5</option>
+                                <option value="6">Semester 6</option>
+                                <option value="7">Semester 7</option>
+                                <option value="8">Semester 8</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Note Type</label>
+                            <select id="filter-type">
+                                <option value="">All Types</option>
+                                <option value="Lecture Notes">Lecture Notes</option>
+                                <option value="Handwritten Notes">Handwritten Notes</option>
+                                <option value="Revision Notes">Revision Notes</option>
+                                <option value="Cheat Sheet">Cheat Sheet</option>
+                                <option value="Study Material">Study Material</option>
+                            </select>
+                        </div>
+                        <button class="secondary-btn" id="btn-clear-filters" style="width: 100%; justify-content: center;">Clear Filters</button>
+                    </div>
+                    
+                    <!-- Results Area -->
+                    <div class="results-area">
+                        <div class="notes-search-bar" style="margin-bottom: 24px;">
+                            <i data-lucide="search" class="search-icon"></i>
+                            <input type="text" id="browse-search-input" placeholder="Search titles, topics...">
+                        </div>
+                        
+                        <div id="browse-results-info" style="margin-bottom: 16px; color: var(--text-muted); font-size: 0.9rem;">
+                            Showing all notes
+                        </div>
+
+                        <div class="notes-grid" id="browse-notes-grid">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: SAVED NOTES -->
+            <div id="view-notes-saved" class="app-view">
+                <div class="page-header">
+                    <h2 class="section-title">Saved Notes</h2>
+                    <p>Your personal collection of bookmarked study materials.</p>
+                </div>
+                <div class="notes-grid" id="saved-notes-grid">
                     <!-- Populated via JS -->
                 </div>
-            </div> <!-- End Details View -->
+            </div>
+
+            <!-- VIEW: UPLOAD NOTES -->
+            <div id="view-notes-upload" class="app-view">
+                <div class="page-header">
+                    <h2 class="section-title">Share Your Notes</h2>
+                    <p>Upload useful study material for your campus community.</p>
+                </div>
+
+                <!-- Privacy Warning Alert -->
+                <div class="alert-box warning">
+                    <i data-lucide="alert-triangle"></i>
+                    <div>
+                        <strong>Before uploading:</strong> Make sure your document does not contain personal information such as your phone number, email address, student ID or other private information unless you intentionally want to share it.
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <form id="upload-note-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="upload-title">Note Title *</label>
+                                <input type="text" id="upload-title" placeholder="e.g. Complete Trees & Graphs Unit 3" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="upload-subject">Subject *</label>
+                                <select id="upload-subject" required>
+                                    <option value="">Select Subject</option>
+                                    <option value="Data Structures">Data Structures</option>
+                                    <option value="Operating Systems">Operating Systems</option>
+                                    <option value="Database Management">Database Management</option>
+                                    <option value="Engineering Mathematics">Engineering Mathematics</option>
+                                    <option value="Computer Networks">Computer Networks</option>
+                                    <option value="Digital Electronics">Digital Electronics</option>
+                                    <option value="Algorithms">Algorithms</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="upload-branch">Branch *</label>
+                                <select id="upload-branch" required>
+                                    <option value="CSE">CSE</option>
+                                    <option value="ECE">ECE</option>
+                                    <option value="Mechanical">Mechanical</option>
+                                    <option value="Civil">Civil</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="upload-semester">Semester *</label>
+                                <select id="upload-semester" required>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload-type">Note Type *</label>
+                            <select id="upload-type" required>
+                                <option value="Lecture Notes">Lecture Notes</option>
+                                <option value="Handwritten Notes">Handwritten Notes</option>
+                                <option value="Revision Notes">Revision Notes</option>
+                                <option value="Question Bank">Question Bank</option>
+                                <option value="Cheat Sheet">Cheat Sheet</option>
+                                <option value="Lab Notes">Lab Notes</option>
+                                <option value="Study Material">Study Material</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload-desc">Description (Optional)</label>
+                            <textarea id="upload-desc" rows="3" maxlength="500" placeholder="Briefly describe what these notes contain..."></textarea>
+                        </div>
+
+                        <!-- Drag and Drop Area -->
+                        <div class="form-group">
+                            <label>File Upload *</label>
+                            <div class="file-upload-zone" id="file-upload-zone">
+                                <i data-lucide="file-up" class="upload-icon"></i>
+                                <p>Drag & drop your file or <span style="color:var(--primary-color); cursor:pointer;">Browse Files</span></p>
+                                <small>PDF, DOCX, PPTX, JPG, PNG (Max 50MB)</small>
+                                <input type="file" id="actual-file-input" style="display:none" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png">
+                            </div>
+                            <!-- Mock upload preview -->
+                            <div id="file-upload-preview" class="file-preview-card" style="display: none;">
+                                <i data-lucide="file-text"></i>
+                                <div class="file-details">
+                                    <span class="file-name" id="mock-file-name">document.pdf</span>
+                                    <span class="file-size">2.4 MB • PDF</span>
+                                </div>
+                                <button type="button" class="remove-file-btn" id="btn-remove-file"><i data-lucide="x"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <a href="#notes-overview" class="secondary-btn no-underline">Cancel</a>
+                            <button type="submit" class="primary-cta"><i data-lucide="upload-cloud" class="cta-icon"></i> Publish Notes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- VIEW: MY UPLOADS -->
+            <div id="view-notes-my-uploads" class="app-view">
+                <div class="page-header">
+                    <h2 class="section-title">My Uploaded Notes</h2>
+                    <p>Track the status and impact of the notes you've shared.</p>
+                </div>
+
+                <section class="statistics-grid" id="my-uploads-stats" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px;">
+                    <!-- Populated via JS -->
+                </section>
+
+                <div class="history-list" id="my-uploads-list">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- VIEW: NOTE DETAILS -->
+            <div id="view-notes-details" class="app-view">
+                <div class="page-header header-with-back">
+                    <a href="javascript:history.back()" class="back-link"><i data-lucide="arrow-left" class="inline-icon"></i> Back</a>
+                    <h2 class="section-title">Note Details</h2>
+                </div>
+                
+                <div id="note-details-container">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
 
         </div>
     </main>
