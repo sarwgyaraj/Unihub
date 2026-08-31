@@ -38,9 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const notesRoutes = ['#notes-overview', '#notes-browse', '#notes-saved', '#notes-upload', '#notes-my-uploads', '#note'];
         const feedbackRoutes = ['#dashboard', '#submit', '#history', '#track', '#feedback'];
         const appointmentsRoutes = ['#appointments-home'];
+        const assignmentsRoutes = ['#assignments-dashboard', '#assignments-all'];
         
         if (notesRoutes.includes(route)) currentModule = 'notes';
         else if (appointmentsRoutes.includes(route)) currentModule = 'appointments';
+        else if (assignmentsRoutes.includes(route)) currentModule = 'assignments';
         else if (feedbackRoutes.includes(route)) currentModule = 'feedback';
 
         updateGlobalHeaderAndNav();
@@ -67,6 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Appointments Routes
             case '#appointments-home': document.getElementById('view-appointments-home').classList.add('active'); break;
+            
+            // Assignments Routes
+            case '#assignments-dashboard': document.getElementById('view-assignments-dashboard').classList.add('active'); renderAssignmentsDashboard(); break;
+            case '#assignments-all': document.getElementById('view-assignments-all').classList.add('active'); renderAssignmentsAll(); break;
             
             default: document.getElementById('view-dashboard').classList.add('active'); renderFeedbackDashboard();
         }
@@ -98,9 +104,21 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('appointments-internal-nav').style.display = 'block';
             headerTitles.innerHTML = `<h1>Professor Appointments</h1><p>Connect with the right professor. At the right time.</p>`;
             document.querySelector('.sidebar-nav .nav-item[data-view="appointments-home"]').classList.add('active');
+        } else if (currentModule === 'assignments') {
+            document.getElementById('notes-internal-nav').style.display = 'none';
+            document.getElementById('appointments-internal-nav').style.display = 'none';
+            document.getElementById('assignments-internal-nav').style.display = 'block';
+            headerTitles.innerHTML = `<h1>Assignment Deadlines</h1><p>Stay on top of your coursework and never miss an important deadline.</p>`;
+            document.querySelector('.sidebar-nav .nav-item[data-view="assignments-dashboard"]').classList.add('active');
+            
+            document.querySelectorAll('#assignments-internal-nav .internal-nav-link').forEach(el => el.classList.remove('active'));
+            let activeInternal = document.querySelector(`#assignments-internal-nav .internal-nav-link[href="${window.location.hash}"]`);
+            if (activeInternal) activeInternal.classList.add('active');
+
         } else {
             document.getElementById('notes-internal-nav').style.display = 'none';
             document.getElementById('appointments-internal-nav').style.display = 'none';
+            document.getElementById('assignments-internal-nav').style.display = 'none';
             headerTitles.innerHTML = `<h1>Anonymous Student Feedback</h1><p>Share your experience and help improve campus.</p>`;
             document.querySelector('.sidebar-nav .nav-item[data-view="dashboard"]').classList.add('active');
         }
@@ -571,6 +589,440 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", (e) => {
         if (!notifDropdown.contains(e.target) || e.target.tagName === 'A') notifDropdown.classList.remove("show");
         if (!profDropdown.contains(e.target) || e.target.tagName === 'A') profDropdown.classList.remove("show");
+    });
+
+
+    // ==========================================
+    // ASSIGNMENT DEADLINES LOGIC
+    // ==========================================
+
+    // Date Logic Helpers
+    function getAssignmentStatus(dueDateStr, completed) {
+        if (completed) return "Completed";
+        const now = new Date();
+        const due = new Date(dueDateStr);
+        const diffMs = due - now;
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        
+        if (diffMs < 0) return "Overdue";
+        if (diffDays === 0) return "Due Today";
+        if (diffDays === 1) return "Due Tomorrow";
+        if (diffDays <= 7) return "Due Soon";
+        return "Upcoming";
+    }
+
+    function getStatusClass(status) {
+        if (status === "Completed") return "status-completed";
+        if (status === "Overdue") return "status-overdue";
+        if (status === "Due Today" || status === "Due Tomorrow" || status === "Due Soon") return "status-soon";
+        return "status-upcoming";
+    }
+
+    function getTimeRemainingText(dueDateStr) {
+        const now = new Date();
+        const due = new Date(dueDateStr);
+        const diffMs = due - now;
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        
+        if (diffMs < 0) return `${Math.abs(diffDays)} day(s) overdue`;
+        if (diffDays === 0) {
+            const hours = Math.floor(diffMs / (1000 * 60 * 60));
+            const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+            return `Due today • ${hours}h ${mins}m left`;
+        }
+        if (diffDays === 1) return `Due tomorrow`;
+        return `Due in ${diffDays} days`;
+    }
+
+    // Dashboard Render
+    function renderAssignmentsDashboard() {
+        const assignments = AssignmentManager.getAll();
+        
+        // Update statuses dynamically before render
+        assignments.forEach(a => a.status = getAssignmentStatus(a.dueDate, a.completed));
+        
+        const total = assignments.length;
+        const dueSoon = assignments.filter(a => a.status === "Due Soon" || a.status === "Due Tomorrow" || a.status === "Due Today").length;
+        const thisWeek = assignments.filter(a => {
+            if (a.completed) return false;
+            const diffDays = Math.ceil((new Date(a.dueDate) - new Date()) / (1000 * 60 * 60 * 24));
+            return diffDays >= 0 && diffDays <= 7;
+        }).length;
+        const overdue = assignments.filter(a => a.status === "Overdue").length;
+
+        // Render KPIs
+        document.getElementById("assignments-stats-grid").innerHTML = `
+            <div class="stat-card"><div class="stat-header"><span class="stat-title">Total Assignments</span><i data-lucide="clipboard-list" class="stat-icon"></i></div><div class="stat-value">${total}</div><div class="stat-desc">All active assignments</div></div>
+            <div class="stat-card"><div class="stat-header"><span class="stat-title">Due Soon</span><i data-lucide="clock" class="stat-icon" style="color:#f59e0b;"></i></div><div class="stat-value">${dueSoon}</div><div class="stat-desc">Due within 7 days</div></div>
+            <div class="stat-card"><div class="stat-header"><span class="stat-title">This Week</span><i data-lucide="calendar" class="stat-icon"></i></div><div class="stat-value">${thisWeek}</div><div class="stat-desc">Deadlines this week</div></div>
+            <div class="stat-card"><div class="stat-header"><span class="stat-title">Overdue</span><i data-lucide="alert-circle" class="stat-icon" style="color:#ef4444;"></i></div><div class="stat-value">${overdue}</div><div class="stat-desc">Needs your attention</div></div>
+        `;
+
+        // Render Urgent Banner
+        const bannerContainer = document.getElementById("urgent-deadline-banner-container");
+        const pending = assignments.filter(a => !a.completed).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+        if (pending.length > 0 && pending[0].status !== "Upcoming") {
+            const urgent = pending[0];
+            bannerContainer.innerHTML = `
+                <div class="urgent-banner">
+                    <div class="urgent-banner-left">
+                        <i data-lucide="alert-triangle" class="urgent-icon"></i>
+                        <div class="urgent-content">
+                            <h4>⚠ Deadline approaching</h4>
+                            <p>${urgent.title}</p>
+                            <small>Due: ${new Date(urgent.dueDate).toLocaleDateString()} • ${new Date(urgent.dueDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</small>
+                            <div class="urgent-progress">
+                                <div class="progress-bar-bg" style="width: 150px; height: 4px;"><div class="progress-bar-fill" style="width: ${urgent.progress}%;"></div></div>
+                                ${urgent.progress}% complete
+                            </div>
+                        </div>
+                    </div>
+                    <button class="primary-cta" onclick="openAssignmentDetail('${urgent.id}')">Continue Assignment <i data-lucide="arrow-right" class="cta-icon"></i></button>
+                </div>
+            `;
+            bannerContainer.style.display = 'block';
+        } else {
+            bannerContainer.style.display = 'none';
+        }
+
+        // Render Upcoming List
+        const listContainer = document.getElementById("upcoming-assignments-list");
+        if (pending.length === 0) {
+            listContainer.innerHTML = `<div class="empty-state"><i data-lucide="calendar-check" style="width:48px;height:48px;color:var(--primary-color);margin-bottom:16px;"></i><h3>No upcoming deadlines</h3><p>You're all caught up. New assignments will appear here.</p><button class="primary-cta" style="margin-top:16px;" onclick="document.getElementById('btn-add-assignment').click()">Add Assignment</button></div>`;
+        } else {
+            listContainer.innerHTML = pending.slice(0, 4).map(createAssignmentCardHTML).join('');
+        }
+
+        // Render Deadline Overview
+        document.getElementById("deadline-overview-container").innerHTML = `
+            <div style="display:flex; justify-content:space-between;"><span>This Week</span><strong>${thisWeek} assignments</strong></div>
+            <div style="display:flex; justify-content:space-between;"><span>Next 7 Days</span><strong>${dueSoon} assignments</strong></div>
+            <div style="display:flex; justify-content:space-between; color:#ef4444;"><span>Overdue</span><strong>${overdue} assignments</strong></div>
+            <div style="display:flex; justify-content:space-between; color:#10b981;"><span>Completed</span><strong>${assignments.filter(a=>a.completed).length} assignments</strong></div>
+        `;
+
+        // Render Recent Activity (Mock)
+        document.getElementById("assignment-recent-activity").innerHTML = `
+            <div class="update-item"><p class="update-text"><i data-lucide="check-circle" class="inline-icon" style="color:#10b981"></i> Assignment marked completed: <strong>Calculus Problem Set</strong></p><span class="update-time">2 hours ago</span></div>
+            <div class="update-item"><p class="update-text"><i data-lucide="plus-circle" class="inline-icon" style="color:var(--primary-color)"></i> Assignment added: <strong>Binary Trees</strong></p><span class="update-time">Yesterday</span></div>
+            <div class="update-item"><p class="update-text"><i data-lucide="bell" class="inline-icon" style="color:#f59e0b"></i> Reminder set: <strong>Physics Lab Report</strong></p><span class="update-time">2 days ago</span></div>
+        `;
+
+        renderCalendar();
+        updateIcons();
+    }
+
+    function createAssignmentCardHTML(a) {
+        const statusClass = getStatusClass(a.status);
+        const timeRemaining = getTimeRemainingText(a.dueDate);
+        
+        return `
+            <div class="asn-card" onclick="openAssignmentDetail('${a.id}')">
+                <div class="asn-card-header">
+                    <span class="asn-subject">${a.subject}</span>
+                    <span class="priority-label priority-${a.priority.toLowerCase()}">${a.priority}</span>
+                </div>
+                <h3>${a.title}</h3>
+                <p class="asn-desc">${a.description}</p>
+                
+                <div class="asn-due">
+                    <i data-lucide="clock"></i> ${timeRemaining} (${new Date(a.dueDate).toLocaleDateString()})
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar-bg"><div class="progress-bar-fill ${a.completed ? 'completed' : ''}" style="width: ${a.progress}%"></div></div>
+                    <div class="progress-text">
+                        <span>${a.progress}% Complete</span>
+                        <span class="asn-status ${statusClass}"><span class="asn-dot"></span> ${a.status}</span>
+                    </div>
+                </div>
+                
+                <div class="asn-card-footer">
+                    <span style="font-size: 0.8rem; color: var(--text-muted);"><i data-lucide="user" class="inline-icon"></i> ${a.instructor || 'Unknown'}</span>
+                    <button class="primary-cta">${a.completed ? 'Review' : 'Continue'}</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // Calendar Render
+    let currentCalDate = new Date();
+    
+    function renderCalendar() {
+        const year = currentCalDate.getFullYear();
+        const month = currentCalDate.getMonth();
+        
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        document.getElementById("cal-month-year").innerText = `${monthNames[month]} ${year}`;
+        
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        
+        const container = document.getElementById("calendar-days-container");
+        container.innerHTML = "";
+        
+        // Empty slots
+        for (let i = 0; i < firstDay; i++) {
+            container.innerHTML += `<div class="cal-cell empty"></div>`;
+        }
+        
+        const assignments = AssignmentManager.getAll();
+        
+        for (let i = 1; i <= daysInMonth; i++) {
+            const cellDate = new Date(year, month, i);
+            const dateStr = cellDate.toISOString().split('T')[0];
+            
+            // Find assignments for this day
+            const dayAssignments = assignments.filter(a => a.dueDate.startsWith(dateStr));
+            let indicatorHTML = "";
+            let extraClass = "";
+            
+            if (dayAssignments.length > 0) {
+                const hasOverdue = dayAssignments.some(a => !a.completed && a.status === "Overdue");
+                extraClass = hasOverdue ? "has-overdue" : "";
+                indicatorHTML = `<div class="cal-indicator"></div>`;
+            }
+            
+            // Highlight today
+            const isToday = cellDate.toDateString() === new Date().toDateString() ? "active" : "";
+            
+            container.innerHTML += `<div class="cal-cell ${isToday} ${extraClass}" onclick="selectCalendarDate('${dateStr}')">${i}${indicatorHTML}</div>`;
+        }
+        
+        // Select today by default
+        selectCalendarDate(new Date().toISOString().split('T')[0]);
+    }
+
+    document.getElementById("cal-prev")?.addEventListener("click", () => { currentCalDate.setMonth(currentCalDate.getMonth() - 1); renderCalendar(); });
+    document.getElementById("cal-next")?.addEventListener("click", () => { currentCalDate.setMonth(currentCalDate.getMonth() + 1); renderCalendar(); });
+
+    window.selectCalendarDate = function(dateStr) {
+        const assignments = AssignmentManager.getAll().filter(a => a.dueDate.startsWith(dateStr));
+        const container = document.getElementById("calendar-selected-assignments");
+        const displayDate = new Date(dateStr).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+        
+        let html = `<div class="cal-sel-date-title">${displayDate}</div>`;
+        if (assignments.length === 0) {
+            html += `<p style="font-size:0.85rem; color:var(--text-muted);">No deadlines for this date.</p>`;
+        } else {
+            html += assignments.map(a => `
+                <div class="cal-mini-asn" style="cursor:pointer;" onclick="openAssignmentDetail('${a.id}')">
+                    <span><strong>${a.subject}</strong>: ${a.title}</span>
+                    <span>${new Date(a.dueDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                </div>
+            `).join('');
+        }
+        container.innerHTML = html;
+    };
+
+    // All Assignments Render
+    function renderAssignmentsAll() {
+        const assignments = AssignmentManager.getAll();
+        assignments.forEach(a => a.status = getAssignmentStatus(a.dueDate, a.completed));
+        
+        // Populate subject filter dynamically
+        const subjects = [...new Set(assignments.map(a => a.subject))];
+        const subjectSelect = document.getElementById("asn-filter-subject");
+        if(subjectSelect.options.length <= 1) {
+            subjects.forEach(s => subjectSelect.innerHTML += `<option value="${s}">${s}</option>`);
+        }
+        
+        applyAsnFilters();
+    }
+
+    function applyAsnFilters() {
+        let filtered = AssignmentManager.getAll();
+        
+        const status = document.getElementById("asn-filter-status").value;
+        const subject = document.getElementById("asn-filter-subject").value;
+        const search = document.getElementById("asn-search-input").value.toLowerCase();
+        const sort = document.getElementById("asn-sort-select").value;
+
+        if (status) filtered = filtered.filter(a => a.status === status);
+        if (subject) filtered = filtered.filter(a => a.subject === subject);
+        if (search) {
+            filtered = filtered.filter(a => a.title.toLowerCase().includes(search) || a.subject.toLowerCase().includes(search));
+        }
+
+        if (sort === 'dueDate') filtered.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
+        if (sort === 'priority') {
+            const p = { 'High': 3, 'Medium': 2, 'Low': 1 };
+            filtered.sort((a,b) => p[b.priority] - p[a.priority]);
+        }
+        if (sort === 'added') filtered.sort((a,b) => new Date(b.assignedDate) - new Date(a.assignedDate));
+        if (sort === 'subject') filtered.sort((a,b) => a.subject.localeCompare(b.subject));
+
+        const tbody = document.getElementById("assignments-table-body");
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><h3>No assignments found</h3><p>Try changing your search or filters.</p></div></td></tr>`;
+        } else {
+            tbody.innerHTML = filtered.map(a => {
+                const statusClass = getStatusClass(a.status);
+                return `
+                <tr onclick="openAssignmentDetail('${a.id}')">
+                    <td class="title-col" data-label="Assignment"><strong>${a.title}</strong><span>${a.description.substring(0,40)}...</span></td>
+                    <td data-label="Subject">${a.subject}</td>
+                    <td data-label="Due Date">${new Date(a.dueDate).toLocaleDateString()} <br> <span style="font-size:0.8rem; color:var(--text-muted)">${new Date(a.dueDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></td>
+                    <td data-label="Priority"><span class="priority-label priority-${a.priority.toLowerCase()}">${a.priority}</span></td>
+                    <td data-label="Progress"><div class="progress-bar-bg"><div class="progress-bar-fill ${a.completed ? 'completed':''}" style="width: ${a.progress}%"></div></div><span style="font-size:0.8rem">${a.progress}%</span></td>
+                    <td data-label="Status"><span class="asn-status ${statusClass}"><span class="asn-dot"></span> ${a.status}</span></td>
+                    <td data-label="Action"><button class="secondary-btn">View</button></td>
+                </tr>`;
+            }).join('');
+        }
+        updateIcons();
+    }
+
+    ['asn-filter-status', 'asn-filter-subject', 'asn-sort-select'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', applyAsnFilters);
+    });
+    document.getElementById('asn-search-input')?.addEventListener('input', applyAsnFilters);
+    document.getElementById('asn-btn-clear-filters')?.addEventListener('click', () => {
+        document.getElementById('asn-filter-status').value = "";
+        document.getElementById('asn-filter-subject').value = "";
+        document.getElementById('asn-search-input').value = "";
+        applyAsnFilters();
+    });
+
+    // Add/Edit Modal Logic
+    const formModal = document.getElementById("assignment-form-modal");
+    document.getElementById("btn-add-assignment")?.addEventListener("click", () => {
+        document.getElementById("assignment-form").reset();
+        document.getElementById("asn-form-id").value = "";
+        document.getElementById("asn-form-title").innerText = "Add Assignment";
+        
+        // Default date to tomorrow
+        const tmrw = new Date(); tmrw.setDate(tmrw.getDate() + 1);
+        document.getElementById("asn-form-date").value = tmrw.toISOString().split('T')[0];
+        
+        formModal.classList.add("show");
+    });
+    
+    document.getElementById("asn-form-close")?.addEventListener("click", () => formModal.classList.remove("show"));
+    document.getElementById("asn-form-cancel")?.addEventListener("click", () => formModal.classList.remove("show"));
+
+    document.getElementById("assignment-form")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const id = document.getElementById("asn-form-id").value;
+        const dateStr = document.getElementById("asn-form-date").value;
+        const timeStr = document.getElementById("asn-form-time").value;
+        
+        const data = {
+            title: document.getElementById("asn-form-title-input").value,
+            subject: document.getElementById("asn-form-subject").value,
+            priority: document.getElementById("asn-form-priority").value,
+            description: document.getElementById("asn-form-desc").value || "No description provided.",
+            dueDate: new Date(`${dateStr}T${timeStr}:00`).toISOString(),
+            instructor: "Unknown"
+        };
+        
+        if (id) {
+            AssignmentManager.update(id, data);
+            alert("Assignment updated successfully.");
+        } else {
+            data.progress = 0;
+            AssignmentManager.add(data);
+            alert("Assignment added successfully.");
+        }
+        
+        formModal.classList.remove("show");
+        handleRoute(); // refresh view
+    });
+
+    // Details Modal Logic
+    const detailModal = document.getElementById("assignment-detail-modal");
+    document.getElementById("asn-detail-close")?.addEventListener("click", () => detailModal.classList.remove("show"));
+
+    window.openAssignmentDetail = function(id) {
+        const a = AssignmentManager.getById(id);
+        if (!a) return;
+        
+        const statusClass = getStatusClass(a.status);
+        
+        document.getElementById("asn-detail-content").innerHTML = `
+            <div class="detail-header-block">
+                <div class="detail-subject">${a.subject}</div>
+                <h2 class="section-title" style="margin-bottom: 8px;">${a.title}</h2>
+                <div class="asn-status ${statusClass}"><span class="asn-dot"></span> ${a.status}</div>
+            </div>
+            
+            <div class="detail-desc">${a.description}</div>
+            
+            <div class="detail-info-grid">
+                <div class="detail-info-item"><span class="detail-info-label">Instructor</span><span class="detail-info-value">${a.instructor}</span></div>
+                <div class="detail-info-item"><span class="detail-info-label">Assigned</span><span class="detail-info-value">${new Date(a.assignedDate).toLocaleDateString()}</span></div>
+                <div class="detail-info-item"><span class="detail-info-label">Due Date</span><span class="detail-info-value">${new Date(a.dueDate).toLocaleDateString()} • ${new Date(a.dueDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>
+                <div class="detail-info-item"><span class="detail-info-label">Priority</span><span class="priority-label priority-${a.priority.toLowerCase()}" style="width:fit-content">${a.priority}</span></div>
+            </div>
+            
+            <div class="progress-edit-block">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="font-size:1.05rem; margin:0;">Progress</h3>
+                    <span style="font-size:1.1rem; font-weight:700; color:var(--primary-color);" id="modal-prog-val">${a.progress}%</span>
+                </div>
+                <div class="progress-input-group">
+                    <input type="range" id="modal-prog-slider" min="0" max="100" value="${a.progress}">
+                    <button class="secondary-btn" id="modal-btn-update-prog" style="padding: 4px 12px; font-size: 0.8rem;">Update</button>
+                </div>
+            </div>
+            
+            <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;">
+                <button class="primary-cta" id="modal-btn-toggle" style="flex:1;">
+                    <i data-lucide="${a.completed ? 'x' : 'check'}" class="cta-icon"></i> ${a.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
+                </button>
+                <button class="secondary-btn" id="modal-btn-edit"><i data-lucide="edit" class="inline-icon"></i> Edit</button>
+                <button class="secondary-btn" id="modal-btn-delete" style="color:#ef4444; border-color:rgba(239, 68, 68, 0.3);"><i data-lucide="trash" class="inline-icon"></i> Delete</button>
+            </div>
+        `;
+        
+        detailModal.classList.add("show");
+        updateIcons();
+        
+        // Bind Detail Actions
+        const slider = document.getElementById("modal-prog-slider");
+        slider.addEventListener("input", (e) => { document.getElementById("modal-prog-val").innerText = e.target.value + "%"; });
+        
+        document.getElementById("modal-btn-update-prog").addEventListener("click", () => {
+            AssignmentManager.updateProgress(a.id, slider.value);
+            detailModal.classList.remove("show");
+            handleRoute();
+        });
+        
+        document.getElementById("modal-btn-toggle").addEventListener("click", () => {
+            AssignmentManager.toggleComplete(a.id);
+            detailModal.classList.remove("show");
+            handleRoute();
+        });
+        
+        document.getElementById("modal-btn-edit").addEventListener("click", () => {
+            detailModal.classList.remove("show");
+            document.getElementById("asn-form-id").value = a.id;
+            document.getElementById("asn-form-title").innerText = "Edit Assignment";
+            document.getElementById("asn-form-title-input").value = a.title;
+            document.getElementById("asn-form-subject").value = a.subject;
+            document.getElementById("asn-form-priority").value = a.priority;
+            document.getElementById("asn-form-desc").value = a.description;
+            
+            const due = new Date(a.dueDate);
+            document.getElementById("asn-form-date").value = due.toISOString().split('T')[0];
+            document.getElementById("asn-form-time").value = due.toTimeString().substring(0,5);
+            
+            formModal.classList.add("show");
+        });
+        
+        document.getElementById("modal-btn-delete").addEventListener("click", () => {
+            if (confirm(`Are you sure you want to delete "${a.title}"?`)) {
+                AssignmentManager.delete(a.id);
+                detailModal.classList.remove("show");
+                handleRoute();
+            }
+        });
+    };
+
+    // Close modals on outside click
+    document.addEventListener("click", (e) => {
+        if (e.target === detailModal) detailModal.classList.remove("show");
+        if (e.target === formModal) formModal.classList.remove("show");
     });
 
 

@@ -105,3 +105,145 @@ const NotesManager = {
         }
     }
 };
+
+
+// ==========================================
+// ASSIGNMENT DEADLINES DATA
+// ==========================================
+
+// Calculate dynamic dates based on today for realistic mock data
+const today = new Date();
+const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(23, 59, 0, 0);
+const in3Days = new Date(today); in3Days.setDate(in3Days.getDate() + 3); in3Days.setHours(23, 59, 0, 0);
+const in5Days = new Date(today); in5Days.setDate(in5Days.getDate() + 5); in5Days.setHours(23, 59, 0, 0);
+const in7Days = new Date(today); in7Days.setDate(in7Days.getDate() + 7); in7Days.setHours(23, 59, 0, 0);
+const past2Days = new Date(today); past2Days.setDate(past2Days.getDate() - 2); past2Days.setHours(23, 59, 0, 0);
+
+const defaultAssignmentsData = [
+    {
+        id: "ASN-001",
+        title: "Assignment 03 — Binary Trees",
+        subject: "Data Structures",
+        description: "Implement binary tree traversal algorithms and analyze their time complexity.",
+        dueDate: tomorrow.toISOString(),
+        priority: "High",
+        progress: 80,
+        status: "Due Tomorrow",
+        completed: false,
+        instructor: "Dr. Ananya Sharma",
+        assignedDate: new Date(today.getTime() - 7*24*60*60*1000).toISOString()
+    },
+    {
+        id: "ASN-002",
+        title: "Lab Report — Optics",
+        subject: "Physics",
+        description: "Submit the final optics laboratory report.",
+        dueDate: in3Days.toISOString(),
+        priority: "Medium",
+        progress: 60,
+        status: "Upcoming",
+        completed: false,
+        instructor: "Dr. Priya Mehta",
+        assignedDate: new Date(today.getTime() - 5*24*60*60*1000).toISOString()
+    },
+    {
+        id: "ASN-003",
+        title: "SQL Assignment — Queries",
+        subject: "Database Management",
+        description: "Complete the assigned SQL query exercises.",
+        dueDate: in5Days.toISOString(),
+        priority: "Medium",
+        progress: 30,
+        status: "Upcoming",
+        completed: false,
+        instructor: "Prof. R. Menon",
+        assignedDate: new Date(today.getTime() - 2*24*60*60*1000).toISOString()
+    },
+    {
+        id: "ASN-004",
+        title: "Calculus Problem Set",
+        subject: "Mathematics",
+        description: "Unit 2 problem set covering limits and continuity.",
+        dueDate: past2Days.toISOString(),
+        priority: "High",
+        progress: 100,
+        status: "Completed",
+        completed: true,
+        instructor: "Dr. Rajesh Kumar",
+        assignedDate: new Date(today.getTime() - 14*24*60*60*1000).toISOString()
+    },
+    {
+        id: "ASN-005",
+        title: "Responsive Portfolio",
+        subject: "Web Development",
+        description: "Build a responsive personal portfolio using HTML and CSS.",
+        dueDate: in7Days.toISOString(),
+        priority: "Low",
+        progress: 45,
+        status: "Upcoming",
+        completed: false,
+        instructor: "Ms. Kavita Singh",
+        assignedDate: new Date(today.getTime() - 3*24*60*60*1000).toISOString()
+    }
+];
+
+let userAssignments = getStoredItem('userAssignments', defaultAssignmentsData);
+
+const AssignmentManager = {
+    getAll: () => userAssignments,
+    
+    getById: (id) => userAssignments.find(a => a.id === id),
+    
+    add: (assignment) => {
+        const newAssignment = {
+            id: "ASN-" + Math.random().toString(36).substring(2, 7).toUpperCase(),
+            ...assignment,
+            completed: false,
+            assignedDate: new Date().toISOString()
+        };
+        userAssignments.push(newAssignment);
+        setStoredItem('userAssignments', userAssignments);
+        return newAssignment;
+    },
+    
+    update: (id, updates) => {
+        const index = userAssignments.findIndex(a => a.id === id);
+        if (index !== -1) {
+            userAssignments[index] = { ...userAssignments[index], ...updates };
+            setStoredItem('userAssignments', userAssignments);
+            return userAssignments[index];
+        }
+        return null;
+    },
+    
+    delete: (id) => {
+        userAssignments = userAssignments.filter(a => a.id !== id);
+        setStoredItem('userAssignments', userAssignments);
+    },
+    
+    toggleComplete: (id) => {
+        const assignment = AssignmentManager.getById(id);
+        if (assignment) {
+            assignment.completed = !assignment.completed;
+            if (assignment.completed) {
+                assignment.progress = 100;
+            }
+            setStoredItem('userAssignments', userAssignments);
+            return assignment;
+        }
+        return null;
+    },
+    
+    updateProgress: (id, progress) => {
+        const assignment = AssignmentManager.getById(id);
+        if (assignment) {
+            assignment.progress = Math.min(100, Math.max(0, parseInt(progress)));
+            if (assignment.progress === 100) assignment.completed = true;
+            else assignment.completed = false;
+            
+            setStoredItem('userAssignments', userAssignments);
+            return assignment;
+        }
+        return null;
+    }
+};

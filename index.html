@@ -24,7 +24,7 @@
             <a href="#" class="nav-item">
                 <i data-lucide="home" class="nav-icon"></i> <span class="module-text">Portal Dashboard</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="#assignments-dashboard" class="nav-item" data-view="assignments-dashboard">
                 <i data-lucide="calendar" class="nav-icon"></i> <span class="module-text">Assignment Deadlines</span>
             </a>
             <a href="#notes-overview" class="nav-item" data-view="notes-overview">
@@ -127,6 +127,14 @@
                     <a href="#dashboard" class="internal-nav-link" style="font-size: 0.85rem;"><i data-lucide="arrow-left" class="inline-icon"></i> Back to Campus Portal</a>
                     <a href="#appointments-book" class="primary-cta no-underline" style="padding: 8px 16px; font-size: 0.85rem;">Book Appointment</a>
                 </div>
+            </div>
+        </nav>
+
+        <!-- Internal Module Navigation (Assignment Deadlines) -->
+        <nav class="module-internal-nav" id="assignments-internal-nav" style="display: none;">
+            <div class="internal-nav-container">
+                <a href="#assignments-dashboard" class="internal-nav-link" data-internal="assignments-dashboard">Dashboard</a>
+                <a href="#assignments-all" class="internal-nav-link" data-internal="assignments-all">All Assignments</a>
             </div>
         </nav>
 
@@ -941,6 +949,183 @@
                 </footer>
             </div>
 
+            <!-- ========================================== -->
+            <!-- MODULE: ASSIGNMENT DEADLINES VIEWS         -->
+            <!-- ========================================== -->
+
+            <!-- VIEW: ASSIGNMENTS DASHBOARD -->
+            <div id="view-assignments-dashboard" class="app-view">
+                <section class="welcome-section" style="justify-content: space-between;">
+                    <div class="welcome-text">
+                        <h2>Good afternoon, Sarwgya</h2>
+                        <p>Stay organized, keep track of your assignments, and submit your work on time.</p>
+                    </div>
+                    <div style="display:flex; gap: 12px; align-items:center;">
+                        <button class="secondary-btn" id="btn-view-calendar" onclick="window.location.hash='#assignments-all'"><i data-lucide="calendar-days" class="inline-icon"></i> View All</button>
+                        <button class="primary-cta" id="btn-add-assignment"><i data-lucide="plus" class="cta-icon"></i> Add Assignment</button>
+                    </div>
+                </section>
+
+                <section class="statistics-grid" id="assignments-stats-grid">
+                    <!-- Populated via JS -->
+                </section>
+
+                <!-- Urgent Deadline Banner -->
+                <div id="urgent-deadline-banner-container"></div>
+
+                <div class="middle-layout">
+                    <div class="overview-col" style="flex: 2;">
+                        <div class="section-header">
+                            <h2 class="section-title">Upcoming Assignments</h2>
+                            <a href="#assignments-all" class="view-all-link">View All <i data-lucide="arrow-right" class="inline-icon"></i></a>
+                        </div>
+                        <div id="upcoming-assignments-list" style="display:flex; flex-direction:column; gap:16px;">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                    <div class="quick-actions-col" style="flex: 1;">
+                        <h2 class="section-title">Calendar</h2>
+                        <div class="calendar-panel card-bg">
+                            <div class="calendar-header">
+                                <button class="icon-btn" id="cal-prev"><i data-lucide="chevron-left"></i></button>
+                                <strong id="cal-month-year">September 2026</strong>
+                                <button class="icon-btn" id="cal-next"><i data-lucide="chevron-right"></i></button>
+                            </div>
+                            <div class="calendar-grid">
+                                <div class="cal-day-header">Su</div><div class="cal-day-header">Mo</div><div class="cal-day-header">Tu</div><div class="cal-day-header">We</div><div class="cal-day-header">Th</div><div class="cal-day-header">Fr</div><div class="cal-day-header">Sa</div>
+                                <!-- Days populated via JS -->
+                                <div id="calendar-days-container" style="display: contents;"></div>
+                            </div>
+                            <div id="calendar-selected-assignments" class="cal-selected-assignments">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bottom-layout" style="margin-top: 32px;">
+                    <div class="quick-actions-col" style="flex: 1;">
+                        <h2 class="section-title">Quick Actions</h2>
+                        <div class="quick-actions-grid" style="grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="quick-action-card">
+                                <div class="qa-icon"><i data-lucide="calendar"></i></div>
+                                <div class="qa-content">
+                                    <h4>Calendar</h4>
+                                    <p>View all deadlines</p>
+                                    <button class="qa-btn" onclick="window.location.hash='#assignments-all'">Open</button>
+                                </div>
+                            </div>
+                            <div class="quick-action-card">
+                                <div class="qa-icon"><i data-lucide="plus"></i></div>
+                                <div class="qa-content">
+                                    <h4>Add Assignment</h4>
+                                    <p>Create a new deadline</p>
+                                    <button class="qa-btn" onclick="document.getElementById('btn-add-assignment').click()">Add</button>
+                                </div>
+                            </div>
+                            <div class="quick-action-card">
+                                <div class="qa-icon"><i data-lucide="bell"></i></div>
+                                <div class="qa-content">
+                                    <h4>Reminders</h4>
+                                    <p>Manage deadline reminders</p>
+                                    <button class="qa-btn">Manage</button>
+                                </div>
+                            </div>
+                            <div class="quick-action-card">
+                                <div class="qa-icon"><i data-lucide="check-circle"></i></div>
+                                <div class="qa-content">
+                                    <h4>Completed</h4>
+                                    <p>View completed assignments</p>
+                                    <button class="qa-btn" onclick="window.location.hash='#assignments-all'">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-updates-col" style="flex: 1;">
+                        <h2 class="section-title">Recent Activity</h2>
+                        <div class="recent-updates-list" id="assignment-recent-activity">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                    <div class="recent-updates-col" style="flex: 1;">
+                        <h2 class="section-title">Deadline Overview</h2>
+                        <div class="card-bg" style="padding: 20px; display: flex; flex-direction: column; gap: 16px;" id="deadline-overview-container">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: ALL ASSIGNMENTS -->
+            <div id="view-assignments-all" class="app-view">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h2 class="section-title">All Assignments</h2>
+                        <p>Manage all your coursework deadlines in one place.</p>
+                    </div>
+                    <button class="primary-cta" onclick="document.getElementById('btn-add-assignment').click()"><i data-lucide="plus" class="cta-icon"></i> Add</button>
+                </div>
+
+                <div class="browse-layout">
+                    <!-- Filters -->
+                    <div class="filters-sidebar">
+                        <div class="notes-search-bar" style="margin-bottom: 24px; padding-left: 12px;">
+                            <i data-lucide="search" class="search-icon" style="left: 12px;"></i>
+                            <input type="text" id="asn-search-input" placeholder="Search assignments...">
+                        </div>
+                        <div class="filter-group">
+                            <label>Status</label>
+                            <select id="asn-filter-status">
+                                <option value="">All</option>
+                                <option value="Upcoming">Upcoming</option>
+                                <option value="Due Soon">Due Soon</option>
+                                <option value="Overdue">Overdue</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Subject</label>
+                            <select id="asn-filter-subject">
+                                <option value="">All Subjects</option>
+                                <!-- Populated via JS -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Sort By</label>
+                            <select id="asn-sort-select">
+                                <option value="dueDate">Due Date</option>
+                                <option value="priority">Priority</option>
+                                <option value="subject">Subject</option>
+                                <option value="added">Recently Added</option>
+                            </select>
+                        </div>
+                        <button class="secondary-btn" id="asn-btn-clear-filters" style="width: 100%; justify-content: center;">Clear Filters</button>
+                    </div>
+                    
+                    <!-- Results List -->
+                    <div class="results-area">
+                        <div class="card-bg" style="overflow-x: auto;">
+                            <table class="assignments-table">
+                                <thead>
+                                    <tr>
+                                        <th>Assignment</th>
+                                        <th>Subject</th>
+                                        <th>Due Date</th>
+                                        <th>Priority</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="assignments-table-body">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -975,6 +1160,99 @@
                         <li><i data-lucide="x-circle"></i> Personal account info</li>
                     </ul>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Add/Edit Assignment -->
+    <div class="modal-overlay" id="assignment-form-modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close" id="asn-form-close"><i data-lucide="x"></i></button>
+            <h2 class="section-title" id="asn-form-title">Add Assignment</h2>
+            
+            <form id="assignment-form" style="margin-top: 24px;">
+                <input type="hidden" id="asn-form-id">
+                
+                <div class="form-group">
+                    <label for="asn-form-title-input">Assignment Title *</label>
+                    <input type="text" id="asn-form-title-input" placeholder="e.g. Binary Tree Implementation" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="asn-form-subject">Subject *</label>
+                        <select id="asn-form-subject" required>
+                            <option value="">Select Subject</option>
+                            <option value="Data Structures">Data Structures</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Database Management">Database Management</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="asn-form-priority">Priority *</label>
+                        <select id="asn-form-priority" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="asn-form-desc">Description (Optional)</label>
+                    <textarea id="asn-form-desc" rows="3" placeholder="Additional details about the assignment..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="asn-form-date">Due Date *</label>
+                        <input type="date" id="asn-form-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="asn-form-time">Due Time *</label>
+                        <input type="time" id="asn-form-time" value="23:59" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="asn-form-work">Estimated Work (Optional)</label>
+                        <select id="asn-form-work">
+                            <option value="">Select estimate</option>
+                            <option value="Less than 1 hour">Less than 1 hour</option>
+                            <option value="1–2 hours">1–2 hours</option>
+                            <option value="2–4 hours">2–4 hours</option>
+                            <option value="4+ hours">4+ hours</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="asn-form-reminder">Reminder</label>
+                        <select id="asn-form-reminder">
+                            <option value="none">No reminder</option>
+                            <option value="1day">1 day before</option>
+                            <option value="2days">2 days before</option>
+                            <option value="1week">1 week before</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-actions" style="margin-top: 32px;">
+                    <button type="button" class="secondary-btn" id="asn-form-cancel">Cancel</button>
+                    <button type="submit" class="primary-cta"><i data-lucide="check" class="cta-icon"></i> Save Assignment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Assignment Details -->
+    <div class="modal-overlay" id="assignment-detail-modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close" id="asn-detail-close"><i data-lucide="x"></i></button>
+            <div id="asn-detail-content">
+                <!-- Populated via JS -->
             </div>
         </div>
     </div>
