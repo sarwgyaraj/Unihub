@@ -107,8 +107,57 @@ body {
     border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
+}
+
+/* Collapsed State */
+.sidebar.collapsed {
+    width: 80px;
+}
+.sidebar.collapsed .portal-title,
+.sidebar.collapsed .module-text {
+    display: none;
+}
+.sidebar.collapsed .module-title {
+    justify-content: center;
+}
+.sidebar.collapsed .nav-item {
+    justify-content: center;
+    font-size: 0;
+    padding: 12px 0;
+}
+.sidebar.collapsed .nav-icon {
+    margin-right: 0;
+}
+.sidebar.collapsed .nav-divider {
+    margin: var(--spacing-md) 10px;
+}
+
+/* Collapse Toggle Button */
+.sidebar-collapse-btn {
+    position: absolute;
+    right: -14px;
+    top: 24px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+    z-index: 101;
+}
+.sidebar-collapse-btn:hover {
+    color: var(--text-main);
+    background-color: var(--card-bg-hover);
+}
+.sidebar.collapsed .sidebar-collapse-btn {
+    transform: rotate(180deg);
 }
 
 .sidebar-header {

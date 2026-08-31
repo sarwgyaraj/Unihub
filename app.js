@@ -375,6 +375,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Sidebar Collapse (Desktop)
+    const sidebarCollapseBtn = document.getElementById("sidebar-collapse-btn");
+    if (sidebarCollapseBtn) {
+        sidebarCollapseBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("collapsed");
+        });
+    }
+
     // Dropdowns
     const notificationBtn = document.getElementById("notification-btn");
     const notificationDropdown = document.getElementById("notification-dropdown");
