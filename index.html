@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Student Feedback Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="portal-title">Student Campus Portal</span>
+            <span class="module-title">💬 Anonymous Feedback</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-view="dashboard">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <a href="#submit" class="nav-item" data-view="submit">
+                <span class="nav-icon">📝</span> Submit Feedback
+            </a>
+            <a href="#history" class="nav-item" data-view="history">
+                <span class="nav-icon">📊</span> My Feedback
+            </a>
+            <a href="#track" class="nav-item" data-view="track">
+                <span class="nav-icon">🔎</span> Track Feedback
+            </a>
+            
+            <hr class="nav-divider">
+            
+            <a href="#notifications" class="nav-item" data-view="notifications">
+                <span class="nav-icon">🔔</span> Notifications
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">👤</span> Profile
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⚙️</span> Settings
+            </a>
+            
+            <hr class="nav-divider">
+            
+            <a href="#" class="nav-item back-portal">
+                <span class="nav-icon">←</span> Campus Portal
+            </a>
+            <a href="#" class="nav-item logout">
+                <span class="nav-icon">🚪</span> Logout
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="top-header">
+            <button class="hamburger-btn" id="hamburger-btn">☰</button>
+            <div class="header-titles">
+                <h1>Anonymous Student Feedback</h1>
+                <p>Share your experience and help improve campus.</p>
+            </div>
+            
+            <div class="header-right">
+                <div class="notification-wrapper">
+                    <button class="notification-icon" id="notification-btn" aria-label="Notifications">
+                        🔔<span class="notification-badge" id="notification-badge">3</span>
+                    </button>
+                    <!-- Notification Dropdown -->
+                    <div class="notification-dropdown" id="notification-dropdown">
+                        <div class="dropdown-header">Notifications</div>
+                        <div class="dropdown-body" id="dropdown-notifications">
+                            <!-- Populated via JS -->
+                        </div>
+                        <a href="#notifications" class="dropdown-footer" id="view-all-notif-btn">View All Notifications</a>
+                    </div>
+                </div>
+                
+                <div class="user-profile" id="profile-btn">
+                    <div class="avatar">SR</div>
+                    <div class="user-info">
+                        <span class="user-name">Sarwgya Raj</span>
+                        <span class="user-role">Student</span>
+                    </div>
+                    <!-- Profile Menu Dropdown -->
+                    <div class="profile-dropdown" id="profile-dropdown">
+                        <div class="profile-header">
+                            <strong>Sarwgya Raj</strong><br>
+                            <small>Student</small>
+                        </div>
+                        <a href="#">Profile</a>
+                        <a href="#">Settings</a>
+                        <a href="#">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-scroll-area" id="main-scroll-area">
+            
+            <!-- VIEW: DASHBOARD -->
+            <div id="view-dashboard" class="app-view active">
+                <!-- Welcome Section -->
+                <section class="welcome-section">
+                    <div class="welcome-text">
+                        <h2>Good afternoon, Sarwgya 👋</h2>
+                        <p>Your feedback can help make campus better.</p>
+                    </div>
+                    <a href="#submit" class="primary-cta no-underline" id="btn-submit-primary">+ Submit Anonymous Feedback</a>
+                </section>
+
+                <!-- Privacy Card -->
+                <section class="privacy-card">
+                    <div class="privacy-content">
+                        <h3>🔒 Your Privacy Matters</h3>
+                        <p>Your feedback is presented to authorized reviewers without your name or student ID.</p>
+                        <small>Your identity is kept separate from the reviewer-facing feedback record.</small>
+                    </div>
+                    <button class="secondary-btn" id="btn-how-anonymity-works">How anonymity works</button>
+                </section>
+
+                <!-- Statistics -->
+                <section class="statistics-grid" id="statistics-grid">
+                    <!-- Populated via JS -->
+                </section>
+
+                <!-- Middle Section: Quick Actions & Overview -->
+                <div class="middle-layout">
+                    <div class="quick-actions-col">
+                        <h2>Quick Actions</h2>
+                        <div class="quick-actions-grid">
+                            <div class="quick-action-card">
+                                <div class="qa-icon">📝</div>
+                                <div class="qa-content">
+                                    <h4>Submit Feedback</h4>
+                                    <p>Share an anonymous concern or suggestion</p>
+                                    <a href="#submit" class="qa-btn">Start Feedback</a>
+                                </div>
+                            </div>
+                            <div class="quick-action-card">
+                                <div class="qa-icon">🔎</div>
+                                <div class="qa-content">
+                                    <h4>Track Feedback</h4>
+                                    <p>Check the status of an existing submission</p>
+                                    <a href="#track" class="qa-btn">Track Status</a>
+                                </div>
+                            </div>
+                            <div class="quick-action-card">
+                                <div class="qa-icon">📊</div>
+                                <div class="qa-content">
+                                    <h4>My Feedback</h4>
+                                    <p>View your previous submissions</p>
+                                    <a href="#history" class="qa-btn">View History</a>
+                                </div>
+                            </div>
+                            <div class="quick-action-card">
+                                <div class="qa-icon">🔔</div>
+                                <div class="qa-content">
+                                    <h4>Notifications</h4>
+                                    <p>See updates on your feedback</p>
+                                    <a href="#notifications" class="qa-btn">View Notifications</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="overview-col">
+                        <h2>Your Feedback Overview</h2>
+                        <div class="overview-card" id="overview-card">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Section: Recent Feedback & Recent Updates -->
+                <div class="bottom-layout">
+                    <div class="recent-feedback-col">
+                        <div class="section-header">
+                            <h2>Recent Feedback</h2>
+                            <a href="#history" class="view-all-link">View All →</a>
+                        </div>
+                        <div class="recent-feedback-list" id="recent-feedback-list">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                    
+                    <div class="recent-updates-col">
+                        <h2>Recent Updates</h2>
+                        <div class="recent-updates-list" id="recent-updates-list">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End Dashboard View -->
+
+            <!-- VIEW: SUBMIT FEEDBACK -->
+            <div id="view-submit" class="app-view">
+                <div class="page-header">
+                    <h2>Submit Anonymous Feedback</h2>
+                    <p>Your submission is 100% anonymous. Your personal details will not be attached to this record.</p>
+                </div>
+                
+                <div class="form-card">
+                    <form id="submit-feedback-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="submit-category">Category *</label>
+                                <select id="submit-category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Library">Library</option>
+                                    <option value="Hostel">Hostel</option>
+                                    <option value="Faculty">Faculty</option>
+                                    <option value="Canteen">Canteen</option>
+                                    <option value="Facilities">Facilities</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="submit-area">Specific Area *</label>
+                                <input type="text" id="submit-area" placeholder="e.g. Study Spaces" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="submit-severity">Severity</label>
+                                <select id="submit-severity">
+                                    <option value="General">General</option>
+                                    <option value="Concern">Concern</option>
+                                    <option value="Serious">Serious</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="submit-rating">Rating (1-5)</label>
+                                <input type="number" id="submit-rating" min="1" max="5" value="3" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="submit-preview">Feedback Details *</label>
+                            <textarea id="submit-preview" rows="5" placeholder="Describe your concern or suggestion in detail..." required></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <a href="#dashboard" class="secondary-btn no-underline">Cancel</a>
+                            <button type="submit" class="primary-cta">Submit Anonymously</button>
+                        </div>
+                    </form>
+                </div>
+            </div> <!-- End Submit View -->
+
+            <!-- VIEW: MY FEEDBACK (HISTORY) -->
+            <div id="view-history" class="app-view">
+                <div class="page-header">
+                    <h2>My Feedback History</h2>
+                    <p>A list of all anonymous feedback submissions you have made.</p>
+                </div>
+                
+                <div class="history-list" id="history-list-container">
+                    <!-- Populated via JS -->
+                </div>
+            </div> <!-- End History View -->
+
+            <!-- VIEW: TRACK FEEDBACK -->
+            <div id="view-track" class="app-view">
+                <div class="page-header">
+                    <h2>Track Feedback</h2>
+                    <p>Enter your unique Feedback ID to track its current status and resolution timeline.</p>
+                </div>
+
+                <div class="track-card">
+                    <form id="track-form" class="track-form">
+                        <input type="text" id="track-id-input" placeholder="e.g. FB-8K42Q" required>
+                        <button type="submit" class="primary-cta">Search</button>
+                    </form>
+                </div>
+
+                <div id="track-result-container" class="track-result-container" style="display: none;">
+                    <!-- Populated via JS -->
+                </div>
+            </div> <!-- End Track View -->
+
+            <!-- VIEW: NOTIFICATIONS -->
+            <div id="view-notifications" class="app-view">
+                <div class="page-header">
+                    <h2>Notifications</h2>
+                    <p>Recent updates on your submitted feedback.</p>
+                </div>
+                
+                <div class="notifications-page-list" id="notifications-page-list">
+                    <!-- Populated via JS -->
+                </div>
+            </div> <!-- End Notifications View -->
+
+            <!-- VIEW: FEEDBACK DETAILS -->
+            <div id="view-details" class="app-view">
+                <div class="page-header header-with-back">
+                    <a href="javascript:history.back()" class="back-link">← Back</a>
+                    <h2>Feedback Details</h2>
+                </div>
+                
+                <div id="details-container">
+                    <!-- Populated via JS -->
+                </div>
+            </div> <!-- End Details View -->
+
+        </div>
+    </main>
+
+    <!-- Modal for How Anonymity Works -->
+    <div class="modal-overlay" id="anonymity-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">×</button>
+            <h2>🔒 How Anonymity Works</h2>
+            <p>Your feedback is submitted through a secure process that separates your identity from the feedback text.</p>
+            
+            <div class="modal-split">
+                <div class="modal-list">
+                    <h3>Reviewers can see:</h3>
+                    <ul>
+                        <li>✓ Feedback category</li>
+                        <li>✓ Selected area</li>
+                        <li>✓ Rating</li>
+                        <li>✓ Feedback text</li>
+                        <li>✓ Suggestion</li>
+                        <li>✓ Severity</li>
+                        <li>✓ Submission date</li>
+                        <li>✓ Anonymous Feedback ID</li>
+                    </ul>
+                </div>
+                <div class="modal-list">
+                    <h3>Reviewers cannot see:</h3>
+                    <ul class="red-list">
+                        <li>✕ Student name</li>
+                        <li>✕ Student ID</li>
+                        <li>✕ Email</li>
+                        <li>✕ Profile photo</li>
+                        <li>✕ Personal account information</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
